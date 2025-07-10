@@ -41,6 +41,10 @@
             <i class="fas fa-graduation-cap me-1"></i> SPK Beasiswa
         </a>
         <div class="ms-auto d-flex">
+            <a href="{{ route('alternatives.index') }}" class="btn btn-outline-success me-2">
+                <i class="fas fa-users"></i> Alternatif
+            </a>
+
             <a href="{{ route('criteria.index') }}" class="btn btn-outline-primary me-2">
                 <i class="fas fa-list"></i> Kriteria
             </a>
