@@ -41,6 +41,7 @@
                                     @foreach ($alternatives[0]->scores as $score)
                                         <th>{{ $score->criteria->name }}</th>
                                     @endforeach
+                                    <th class="text-center"> <i class="fas fa-tools"></i> Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,6 +51,22 @@
                                         @foreach ($alt->scores as $score)
                                             <td>{{ $score->value }}</td>
                                         @endforeach
+                                        <td class="text-center">
+                                            @if ($alt->scores->count() < $criterias->count())
+                                                <a href="{{-- route('alternatives.edit', $alt->id) --}}"
+                                                    class="btn btn-sm btn-warning me-1">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
+                                            <form action="{{-- route('alternatives.destroy', $alt->id --}}" method="POST"
+                                                class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
