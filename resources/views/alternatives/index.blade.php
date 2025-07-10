@@ -11,25 +11,32 @@
         @endif
 
         @if ($alternatives->isEmpty())
-            @if ($criterias->isEmpty())
-                <div class="alert alert-warning d-flex flex-column align-items-center px-5">
-                    <div class="mb-3">
-                        Belum ada data kriteria yang bisa digunakan.
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="alert alert-warning d-flex flex-column align-items-center px-5">
+                        <div class="mb-3">
+                            <em>Belum ada data alternatif.</em>
+                        </div>
+                        <a href="{{ route('alternatives.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus-circle"></i> Tambah Alternatif
+                        </a>
                     </div>
-                    <a href="{{ route('criteria.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle me-1"></i> Tambah Kriteria
-                    </a>
+                    @if ($criterias->isEmpty())
+                        <div class="alert alert-warning d-flex flex-column align-items-center px-5">
+                            <div class="mb-3">
+                                <em>Belum ada data kriteria yang bisa digunakan.</em>
+                            </div>
+                            <a href="{{ route('criteria.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-1"></i> Tambah Kriteria
+                            </a>
+                        </div>
+                    @else
+                        <div class="text-center">
+                            <em>Sudah ada data kriteria yang bisa digunakan.</em>
+                        </div>
+                    @endif
                 </div>
-            @else
-                <div class="alert alert-warning d-flex flex-column align-items-center px-5">
-                    <div class="mb-3">
-                        Belum ada data alternatif.
-                    </div>
-                    <a href="{{ route('alternatives.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus-circle"></i> Tambah Alternatif
-                    </a>
-                </div>
-            @endif
+            </div>
         @else
             <div class="card shadow-sm border-0">
                 <div class="card-body">

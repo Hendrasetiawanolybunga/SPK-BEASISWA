@@ -25,28 +25,37 @@ class AlternativeController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi dasar: name wajib, scores opsional
         $request->validate([
             'name' => 'required|string',
-            'scores.*' => 'required|numeric'
+            'scores.*' => 'nullable|numeric'
         ]);
 
         DB::beginTransaction();
 
         try {
-            $alt = Alternative::create(['name' => $request->name]);
+            // Simpan nama alternatif
+            $alt = Alternative::create([
+                'name' => $request->name
+            ]);
 
-            foreach ($request->scores as $criteria_id => $value) {
-                Score::create([
-                    'alternative_id' => $alt->id,
-                    'criteria_id' => $criteria_id,
-                    'value' => $value
-                ]);
+            // Cek apakah ada data skor dan proses jika ada
+            if ($request->has('scores') && is_array($request->scores)) {
+                foreach ($request->scores as $criteria_id => $value) {
+                    if ($value !== null && $value !== '') {
+                        Score::create([
+                            'alternative_id' => $alt->id,
+                            'criteria_id' => $criteria_id,
+                            'value' => $value
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
             return redirect()->route('alternatives.index')->with('success', 'Data berhasil ditambahkan.');
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return back()->with('error', 'Gagal simpan: ' . $e->getMessage());
         }
     }
@@ -59,33 +68,42 @@ class AlternativeController extends Controller
 
     public function update(Request $request, Alternative $alternative)
     {
+        // Validasi dasar
         $request->validate([
             'name' => 'required|string',
-            'scores.*' => 'required|numeric'
+            'scores.*' => 'nullable|numeric'  // skor boleh kosong
         ]);
 
         DB::beginTransaction();
 
         try {
+            // Update nama
             $alternative->update(['name' => $request->name]);
 
-            foreach ($request->scores as $criteria_id => $value) {
-                $score = $alternative->scores()->where('criteria_id', $criteria_id)->first();
-                if ($score) {
-                    $score->update(['value' => $value]);
-                } else {
-                    Score::create([
-                        'alternative_id' => $alternative->id,
-                        'criteria_id' => $criteria_id,
-                        'value' => $value
-                    ]);
+            // Jika skor dikirim dan berupa array
+            if ($request->has('scores') && is_array($request->scores)) {
+                foreach ($request->scores as $criteria_id => $value) {
+                    if ($value !== null && $value !== '') {
+                        $score = $alternative->scores()->where('criteria_id', $criteria_id)->first();
+
+                        if ($score) {
+                            $score->update(['value' => $value]);
+                        } else {
+                            Score::create([
+                                'alternative_id' => $alternative->id,
+                                'criteria_id' => $criteria_id,
+                                'value' => $value
+                            ]);
+                        }
+                    }
                 }
             }
 
             DB::commit();
+
             return redirect()->route('alternatives.index')->with('success', 'Data berhasil diperbarui.');
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return back()->with('error', 'Gagal simpan: ' . $e->getMessage());
         }
     }

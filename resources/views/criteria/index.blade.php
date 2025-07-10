@@ -59,7 +59,7 @@
                             @endforeach
                             @if ($criterias->isEmpty())
                                 <tr>
-                                    <td colspan="4" class="text-muted fst-italic">Belum ada data kriteria.</td>
+                                    <td colspan="4" class="text-center text-muted fst-italic">Belum ada data kriteria.</td>
                                 </tr>
                             @endif
                         </tbody>
