@@ -38,7 +38,7 @@ class CriteriaController extends Controller
         Criteria::create($request->only(['name', 'type', 'weight']));
 
         return redirect()->route('criteria.index')
-                         ->with('success', 'Kriteria berhasil ditambahkan.');
+            ->with('success', 'Kriteria berhasil ditambahkan.');
     }
 
     /**
@@ -63,7 +63,7 @@ class CriteriaController extends Controller
         $criteria->update($request->only(['name', 'type', 'weight']));
 
         return redirect()->route('criteria.index')
-                         ->with('success', 'Kriteria berhasil diperbarui.');
+            ->with('success', 'Kriteria berhasil diperbarui.');
     }
 
     /**
@@ -74,6 +74,6 @@ class CriteriaController extends Controller
         $criteria->delete();
 
         return redirect()->route('criteria.index')
-                         ->with('success', 'Kriteria berhasil dihapus.');
+            ->with('success', 'Kriteria berhasil dihapus.');
     }
 }

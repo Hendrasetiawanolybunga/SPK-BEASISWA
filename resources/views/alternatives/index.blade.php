@@ -37,28 +37,41 @@
                         <table class="table table-hover align-middle text-center">
                             <thead class="table-light text-primary">
                                 <tr>
-                                    <th><i class="fas fa-user"></i> Nama</th>
-                                    @foreach ($alternatives[0]->scores as $score)
-                                        <th>{{ $score->criteria->name }}</th>
+                                    <th class="text-nowrap">
+                                        <i class="fas fa-user"></i> Nama
+                                    </th>
+
+                                    @foreach ($criterias as $criteria)
+                                        <th class="text-nowrap">
+                                            {{ $criteria->name }}
+                                        </th>
                                     @endforeach
-                                    <th class="text-center"> <i class="fas fa-tools"></i> Aksi</th>
+
+                                    <th class="text-nowrap">
+                                        <i class="fas fa-tools"></i> Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($alternatives as $alt)
                                     <tr>
                                         <td class="fw-semibold text-start">{{ $alt->name }}</td>
-                                        @foreach ($alt->scores as $score)
-                                            <td>{{ $score->value }}</td>
+
+                                        {{-- Tampilkan nilai sesuai jumlah kriteria --}}
+                                        @foreach ($criterias as $criteria)
+                                            @php
+                                                $score = $alt->scores->where('criteria_id', $criteria->id)->first();
+                                            @endphp
+                                            <td>{{ $score ? $score->value : '-' }}</td>
                                         @endforeach
-                                        <td class="text-center">
-                                            @if ($alt->scores->count() <= $criterias->count())
-                                                <a href="{{-- route('alternatives.edit', $alt->id) --}}"
-                                                    class="btn btn-sm btn-warning me-1">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            @endif
-                                            <form action="{{-- route('alternatives.destroy', $alt->id --}}" method="POST"
+
+                                        {{-- Kolom aksi --}}
+                                        <td class="text-center text-nowrap">
+                                            <a href="{{ route('alternatives.edit', $alt->id) }}"
+                                                class="btn btn-sm btn-warning me-1">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('alternatives.destroy', $alt->id) }}" method="POST"
                                                 class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
                                                 @csrf
                                                 @method('DELETE')
