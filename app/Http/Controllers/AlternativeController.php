@@ -13,7 +13,8 @@ class AlternativeController extends Controller
     public function index()
     {
         $alternatives = Alternative::with('scores.criteria')->get();
-        return view('alternatives.index', compact('alternatives'));
+        $criterias = Criteria::all();
+        return view('alternatives.index', compact('alternatives', 'criterias'));
     }
 
     public function create()
