@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPK Beasiswa</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- FontAwesome Free CDN -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- FontAwesome Free CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -20,9 +21,11 @@
             display: flex;
             flex-direction: column;
         }
+
         main {
             flex: 1;
         }
+
         footer {
             background-color: #f1f1f1;
             color: #555;
@@ -30,6 +33,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
@@ -40,7 +44,7 @@
             <a href="{{ route('criteria.index') }}" class="btn btn-outline-primary me-2">
                 <i class="fas fa-list"></i> Kriteria
             </a>
-           
+
             <a href="{{ route('alternatives.result') }}" class="btn btn-info text-white">
                 <i class="fas fa-chart-line"></i> Lihat Hasil
             </a>
@@ -63,4 +67,5 @@
     <!-- Bootstrap JS (opsional, jika ingin interaktivitas) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
