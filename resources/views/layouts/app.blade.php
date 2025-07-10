@@ -36,7 +36,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5">
         <a class="navbar-brand fw-bold text-primary" href="{{ route('alternatives.index') }}">
             <i class="fas fa-graduation-cap me-1"></i> SPK Beasiswa
         </a>
@@ -45,9 +45,17 @@
                 <i class="fas fa-list"></i> Kriteria
             </a>
 
-            <a href="{{ route('alternatives.result') }}" class="btn btn-info text-white">
-                <i class="fas fa-chart-line"></i> Lihat Hasil
-            </a>
+            <div class="dropdown">
+                <button class="btn btn-info text-white dropdown-toggle" type="button" id="lihatHasilDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-chart-line"></i> Lihat Hasil
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="lihatHasilDropdown">
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-bayes') }}">BAYES</a></li>
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-moora') }}">MOORA</a></li>
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-mairca') }}">MAIRCA</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 

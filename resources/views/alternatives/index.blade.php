@@ -52,7 +52,7 @@
                                             <td>{{ $score->value }}</td>
                                         @endforeach
                                         <td class="text-center">
-                                            @if ($alt->scores->count() < $criterias->count())
+                                            @if ($alt->scores->count() <= $criterias->count())
                                                 <a href="{{-- route('alternatives.edit', $alt->id) --}}"
                                                     class="btn btn-sm btn-warning me-1">
                                                     <i class="fas fa-edit"></i>

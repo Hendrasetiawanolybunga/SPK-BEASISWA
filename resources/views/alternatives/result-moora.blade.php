@@ -14,10 +14,17 @@
                     <div class="table-responsive">
                         <table class="table table-hover align-middle text-center">
                             <thead class="table-primary">
-                                <tr>
-                                    <th class="text-nowrap">🏆 Peringkat</th>
-                                    <th class="text-nowrap">👤 Nama Alternatif</th>
-                                    <th class="text-nowrap">📈 Skor Akhir</th>
+                                <tr class="table-primary text-center align-middle">
+                                    <th class="text-nowrap">
+                                        🏆 <span class="d-none d-md-inline">Peringkat</span>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        👤 <span class="d-none d-md-inline">Nama Alternatif</span>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        📈 <span class="d-none d-md-inline">Skor Akhir</span><br>
+                                        <small class="text-muted fst-italic">(semakin tinggi semakin baik)</small>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
