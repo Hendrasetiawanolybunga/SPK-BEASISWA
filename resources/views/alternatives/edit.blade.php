@@ -22,7 +22,9 @@
                     value="{{ old('name', $alternative->name) }}" required>
             </div>
 
-            <h5 class="mb-3"><i class="fas fa-clipboard-check me-1"></i>Penilaian Kriteria</h5>
+            @if (!$criterias->isEmpty())
+                <h5 class="mb-3"><i class="fas fa-clipboard-check me-1"></i>Penilaian Kriteria</h5>
+            @endif
 
             <div class="row g-4">
                 @foreach ($criterias as $criteria)
