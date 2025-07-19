@@ -12,7 +12,7 @@ class CriteriaSeeder extends Seeder
         $criterias = [
             ['name' => 'Prestasi Akademik', 'type' => 'benefit', 'weight' => 0.15],
             ['name' => 'Prestasi Non-Akademik', 'type' => 'benefit', 'weight' => 0.10],
-            ['name' => 'Kondisi Ekonomi', 'type' => 'cost', 'weight' => 0.15],
+            // ['name' => 'Kondisi Ekonomi', 'type' => 'cost', 'weight' => 0.15],
             ['name' => 'Domisili 3T', 'type' => 'benefit', 'weight' => 0.10],
             ['name' => 'Difabel', 'type' => 'benefit', 'weight' => 0.10],
             ['name' => 'Keterlibatan Masyarakat', 'type' => 'benefit', 'weight' => 0.10],

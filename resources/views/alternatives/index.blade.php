@@ -69,7 +69,17 @@
                                             @php
                                                 $score = $alt->scores->where('criteria_id', $criteria->id)->first();
                                             @endphp
-                                            <td>{{ $score ? $score->value : '-' }}</td>
+                                            @if ($score)
+                                                @if ($score->value == 0)
+                                                    <td>Tidak</td>
+                                                @elseif ($score->value == 1)
+                                                    <td>Ya</td
+                                                @else
+                                                    <td>{{ $score->value }}</td>
+                                                @endif
+                                            @else
+                                                <td>-</td>
+                                            @endif
                                         @endforeach
 
                                         {{-- Kolom aksi --}}
