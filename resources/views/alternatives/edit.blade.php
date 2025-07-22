@@ -46,12 +46,10 @@
                         @if (Str::contains($lowerName, ['penghasilan', 'ekonomi']))
                             <select name="{{ $name }}" class="form-select" required>
                                 <option value="">-- Pilih Kategori --</option>
-                                <option value="1" {{ $scoreValue == 1 ? 'selected' : '' }}>Kategori A (penghasilan
-                                    rendah)</option>
-                                <option value="2" {{ $scoreValue == 2 ? 'selected' : '' }}>Kategori B (penghasilan
-                                    menengah)</option>
-                                <option value="3" {{ $scoreValue == 3 ? 'selected' : '' }}>Kategori C (penghasilan
-                                    tinggi)</option>
+                                <option value="1" {{ $scoreValue == 1 ? 'selected' : '' }}>&lt; Rp.2.500.000</option>
+                                <option value="2" {{ $scoreValue == 2 ? 'selected' : '' }}>Rp 2.500.000 - Rp.5.000.000
+                                </option>
+                                <option value="3" {{ $scoreValue == 3 ? 'selected' : '' }}>&gt; Rp.5.000.000</option>
                             </select>
                         @elseif(Str::contains($lowerName, ['3t', 'difabel']))
                             <select name="{{ $name }}" class="form-select" required>
