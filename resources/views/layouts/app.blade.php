@@ -37,7 +37,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5">
-        <a class="navbar-brand fw-bold text-primary" href="{{ route('alternatives.index') }}">
+        <a class="navbar-brand fw-bold text-primary" href="{{ route('dashboard') }}">
             <i class="fas fa-graduation-cap me-1"></i> SPK Beasiswa
         </a>
         <div class="ms-auto d-flex">
