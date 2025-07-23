@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2 class="mb-4 text-center">📊 Hasil Perhitungan MAIRCA</h2>
+        <h2 class="mb-4 text-center">📊 Hasil Perhitungan BAYES</h2>
 
         @if (empty($scores))
             <div class="alert alert-warning text-center">
