@@ -18,6 +18,7 @@ public function up(): void
         $table->string('name'); // nama kriteria
         $table->enum('type', ['benefit', 'cost']);
         $table->float('weight'); // bobot antara 0 - 1
+        $table->float('bayes_probability');
         $table->timestamps();
     });
 }

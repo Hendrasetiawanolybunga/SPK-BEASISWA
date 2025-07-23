@@ -39,9 +39,9 @@
                         @if (Str::contains($lowerName, ['penghasilan', 'ekonomi']))
                             <select name="{{ $name }}" class="form-select" required>
                                 <option value="">-- Pilih Kategori --</option>
-                                <option value="1">Kategori A (penghasilan rendah)</option>
-                                <option value="2">Kategori B (penghasilan menengah)</option>
-                                <option value="3">Kategori C (penghasilan tinggi)</option>
+                                <option value="1">&lt; Rp.2.500.000</option>
+                                <option value="2">Rp 2.500.000 - Rp.5.000.000</option>
+                                <option value="3">&gt; Rp.5.000.000</option>
                             </select>
                         @elseif(Str::contains($lowerName, ['3t', 'difabel']))
                             <select name="{{ $name }}" class="form-select" required>
@@ -50,8 +50,13 @@
                                 <option value="1">Ya</option>
                             </select>
                         @else
-                            <input type="number" step="any" name="{{ $name }}" class="form-control"
-                                placeholder="Masukkan nilai (misal: 85)" required>
+                            @if (Str::contains($lowerName, ['tanggungan']))
+                                <input type="number" step="any" name="{{ $name }}" class="form-control"
+                                    placeholder="Masukkan jumlah tanggungan (misal: 3 anak)" required>
+                            @else
+                                <input type="number" step="any" name="{{ $name }}" class="form-control"
+                                    placeholder="Masukkan nilai (misal: 85)" required>
+                            @endif
                         @endif
                     </div>
                 @endforeach

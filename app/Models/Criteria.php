@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Criteria extends Model
 {
-    protected $fillable = ['name', 'type', 'weight'];
+    protected $fillable = ['name', 'type', 'weight', 'bayes_probability'];
 
     public function scores()
     {

@@ -59,17 +59,48 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="align-middle">
                                 @foreach ($alternatives as $alt)
-                                    <tr>
-                                        <td class="fw-semibold text-start">{{ $alt->name }}</td>
+                                    <tr class="align-middle">
+                                        <td class="fw-semibold text-start text-nowrap">{{ $alt->name }}</td>
 
                                         {{-- Tampilkan nilai sesuai jumlah kriteria --}}
                                         @foreach ($criterias as $criteria)
                                             @php
                                                 $score = $alt->scores->where('criteria_id', $criteria->id)->first();
                                             @endphp
-                                            <td>{{ $score ? $score->value : '-' }}</td>
+                                            <td class="text-nowrap">
+
+                                                @if (Str::contains(strtolower($criteria->name), 'orang tua') &&
+                                                        Str::contains(strtolower($criteria->name), 'penghasilan'))
+                                                    @if ($score)
+                                                        @switch($score->value)
+                                                            @case(1)
+                                                            < Rp.2.500.000 @break @case(2) Rp
+                                                                2.500.000 - Rp.5.000.000 @break
+                                                                @case(3)> Rp.5.000.000
+                                                                @break
+
+                                                                @default
+                                                                    {{ $score->value }}
+                                                            @endswitch
+                                                        @else
+                                                            -
+                                                    @endif
+                                                @elseif (Str::contains(strtolower($criteria->name), 'orang tua'))
+                                                    {{ $score ? $score->value : '-' }}
+                                                @elseif ($score)
+                                                    @if ($score->value == 0)
+                                                        Tidak
+                                                    @elseif ($score->value == 1)
+                                                        Ya
+                                                    @else
+                                                        {{ $score->value }}
+                                                    @endif
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                         @endforeach
 
                                         {{-- Kolom aksi --}}

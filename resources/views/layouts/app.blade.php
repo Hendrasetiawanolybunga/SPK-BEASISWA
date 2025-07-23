@@ -72,7 +72,7 @@
     <footer class="text-center py-3 border-top mt-auto">
         <div>
             <i class="far fa-copyright"></i>
-            <span class="ms-1">2025 SPK Beasiswa — Dibuat oleh Tim <strong>BlueCode46</strong></span>
+            <span class="ms-1">2025 SPK Beasiswa — Dibuat oleh Tim <strong>TCP</strong></span>
         </div>
     </footer>
 

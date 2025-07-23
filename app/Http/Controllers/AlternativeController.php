@@ -114,16 +114,6 @@ class AlternativeController extends Controller
         return redirect()->route('alternatives.index')->with('success', 'Data berhasil dihapus.');
     }
 
-    public function result_bayes()
-    {
-        $alternatives = Alternative::with('scores.criteria')->get();
-        $criterias = Criteria::all();
-
-        $scores = [];
-
-        return view('alternatives.result-bayes', compact('scores'));
-    }
-
     public function result_moora()
     {
         $criterias = Criteria::all();
@@ -279,5 +269,111 @@ class AlternativeController extends Controller
         usort($deviasi, fn($a, $b) => $a['score'] <=> $b['score']);
 
         return view('alternatives.result-mairca', ['scores' => $deviasi]);
+    }
+
+    public function result_bayes()
+    {
+        $criterias = Criteria::all();
+        $totalCriteria = $criterias->count();
+
+        $alternatives = Alternative::with('scores')->get();
+
+        $validAlternatives = [];
+        $matrix = [];
+
+        // 1. Filter alternatif yang memiliki skor lengkap
+        foreach ($alternatives as $alt) {
+            $scores = $alt->scores->keyBy('criteria_id');
+
+            if ($scores->count() < $totalCriteria) {
+                continue;
+            }
+
+            $row = [];
+            $isComplete = true;
+
+            foreach ($criterias as $criteria) {
+                if (!$scores->has($criteria->id)) {
+                    $isComplete = false;
+                    break;
+                }
+                $row[$criteria->id] = $scores[$criteria->id]->value;
+            }
+
+            if ($isComplete) {
+                $validAlternatives[] = $alt;
+                $matrix[] = $row;
+            }
+        }
+
+        if (count($validAlternatives) === 0) {
+            return view('alternatives.result-bayes', ['scores' => []]);
+        }
+
+        // 2. Normalisasi matrix [0 - 1] untuk setiap kriteria
+        $normalized = [];
+        foreach ($criterias as $j => $c) {
+            $col = array_column($matrix, $c->id);
+            $min = min($col);
+            $max = max($col);
+
+            foreach ($matrix as $i => $row) {
+                if (!isset($normalized[$i])) $normalized[$i] = [];
+
+                if ($max - $min == 0) {
+                    $normalized[$i][$c->id] = 0;
+                } else {
+                    if ($c->type === 'benefit') {
+                        $normalized[$i][$c->id] = ($row[$c->id] - $min) / ($max - $min);
+                    } else {
+                        $normalized[$i][$c->id] = ($max - $row[$c->id]) / ($max - $min);
+                    }
+                }
+            }
+        }
+
+        // 3. Probabilitas prior (bisa disesuaikan)
+        $priorLayak = 0.5;
+        $priorTidakLayak = 0.5;
+
+        // 4. Bobot probabilitas untuk tiap kriteria (gunakan weight sebagai pengganti bayes_probability)
+        $probLayak = [];
+        foreach ($criterias as $criteria) {
+            $probLayak[$criteria->id] = $criteria->weight; // Bisa disesuaikan jika memiliki kolom bayes_probability
+        }
+
+        // 5. Hitung skor untuk tiap alternatif
+        $scores = [];
+        foreach ($normalized as $i => $data) {
+            $pLayak = $priorLayak;
+            $pTidakLayak = $priorTidakLayak;
+
+            foreach ($criterias as $criteria) {
+                $val = $data[$criteria->id];
+                $p = $probLayak[$criteria->id];
+                $pNeg = 1 - $p;
+
+                // Probabilitas bersyarat (dapat dimodifikasi jika ingin pembobotan lebih eksplisit)
+                $pLayak *= ($val * $p + 1e-6); // ditambah 1e-6 untuk menghindari 0
+                $pTidakLayak *= ($val * $pNeg + 1e-6);
+            }
+
+            // Normalisasi hasil
+            $total = $pLayak + $pTidakLayak;
+            $probLayakFinal = $total != 0 ? $pLayak / $total : 0;
+            $probTidakLayakFinal = $total != 0 ? $pTidakLayak / $total : 0;
+
+            $scores[] = [
+                'alt' => $validAlternatives[$i],
+                'score' => $probLayakFinal,
+                'score_tidak' => $probTidakLayakFinal,
+                'keputusan' => $probLayakFinal > $probTidakLayakFinal ? 'LAYAK' : 'TIDAK LAYAK',
+            ];
+        }
+
+        // 6. Urutkan berdasarkan probabilitas LAYAK
+        usort($scores, fn($a, $b) => $b['score'] <=> $a['score']);
+
+        return view('alternatives.result-bayes', ['scores' => $scores]);
     }
 }
