@@ -1,20 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AlternativeController;
-use App\Http\Controllers\CriteriaController;
-use App\Http\Controllers\Auth\LoginController; 
+    use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\AlternativeController;
+    use App\Http\Controllers\CriteriaController;
+    use App\Http\Controllers\Auth\LoginController;
+    use App\Http\Controllers\AdminProfileController;
+    use App\Http\Controllers\DashboardController; // Import DashboardController
 
-
+    // Rute untuk Login dan Logout
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-  
+    // Rute yang dilindungi oleh middleware 'auth:admin'
     Route::middleware(['auth:admin'])->group(function () {
 
-        // Rute Dashboard
-        Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+        // Rute Dashboard (Diperbarui)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Mengarah ke controller
 
         // Rute Sumber Daya Alternatif
         Route::resource('alternatives', AlternativeController::class)
@@ -24,8 +26,8 @@ use App\Http\Controllers\Auth\LoginController;
         // Rute Khusus untuk Hasil Perhitungan Alternatif
         Route::prefix('alternatives')->name('alternatives.')->group(function () {
             Route::get('/result-bayes', [AlternativeController::class, 'result_bayes'])->name('result-bayes');
-            Route::get('/result-moora', [AlternativeController::class, 'result_moora'])->name('result-moora');
-            Route::get('/result-mairca', [AlternativeController::class, 'result_mairca'])->name('result-mairca');
+            Route::get('/result-moora', [AlternativeController::class, 'result-moora'])->name('result-moora');
+            Route::get('/result-mairca', [AlternativeController::class, 'result-mairca'])->name('result-mairca');
         });
 
         // Rute Sumber Daya Kriteria
@@ -33,16 +35,12 @@ use App\Http\Controllers\Auth\LoginController;
             ->parameters(['criteria' => 'criteria'])
             ->except(['show']);
 
-        // Tambahkan rute untuk mengubah profil/password admin 
-        Route::get('/admin/profile', [AdminProfileController::class, 'showChangePasswordForm'])->name('admin.profile');
-        Route::post('/admin/profile', [AdminProfileController::class, 'changePassword'])->name('admin.password.update');
+        // Rute untuk Mengelola Profil Admin (Username & Email)
+        Route::get('/admin/profile', [AdminProfileController::class, 'showProfileForm'])->name('admin.profile.edit');
+        Route::post('/admin/profile', [AdminProfileController::class, 'updateProfile'])->name('admin.profile.update');
 
-     //    Tambahkan rute untuk lupa password 
-        Route::prefix('admin/password')->name('admin.password.')->group(function () {
-            Route::get('/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('request');
-            Route::post('/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('email');
-            Route::get('/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('reset');
-            Route::post('/reset', 'Auth\ResetPasswordController@reset')->name('update');
-        });
+        // Rute untuk Mengubah Password Admin
+        Route::get('/admin/password/change', [AdminProfileController::class, 'showChangePasswordForm'])->name('admin.password.change.form');
+        Route::post('/admin/password/change', [AdminProfileController::class, 'updatePassword'])->name('admin.password.update');
     });
     

@@ -85,15 +85,25 @@
                         <div class="mb-4">
                             <label for="username" class="form-label fw-semibold text-muted">Username</label>
                             <input type="text" id="username" name="username" value="{{ old('username') }}"
-                                   class="form-control form-control-lg" {{-- form-control-lg untuk ukuran lebih besar --}}
+                                   class="form-control form-control-lg @error('username') is-invalid @enderror" {{-- Tambah kelas is-invalid --}}
                                    required autofocus>
+                            @error('username') {{-- Tampilkan pesan error spesifik --}}
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="password" class="form-label fw-semibold text-muted">Password</label>
                             <input type="password" id="password" name="password"
-                                   class="form-control form-control-lg"
+                                   class="form-control form-control-lg @error('password') is-invalid @enderror" {{-- Tambah kelas is-invalid --}}
                                    required>
+                            @error('password') {{-- Tampilkan pesan error spesifik --}}
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -103,8 +113,8 @@
                                     Remember Me
                                 </label>
                             </div>
-                            {{-- Link lupa password akan ditambahkan nanti --}}
-                            <a href="#" class="text-primary text-decoration-none fw-semibold">Lupa Password?</a>
+                            {{-- Link lupa password akan ditambahkan di sini --}}
+                            {{-- <a href="{{ route('admin.password.request') }}" class="text-primary text-decoration-none fw-semibold">Lupa Password?</a> --}}
                         </div>
 
                         <div class="d-grid gap-2"> {{-- d-grid untuk button full width --}}
