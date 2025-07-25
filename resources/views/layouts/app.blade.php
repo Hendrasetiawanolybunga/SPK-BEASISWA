@@ -49,31 +49,36 @@
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5">
-            <a class="navbar-brand fw-bold text-primary" href="{{ route('dashboard') }}">
-                <i class="fas fa-graduation-cap me-1"></i> SPK Beasiswa
+        <a class="navbar-brand fw-bold text-primary" href="{{ route('dashboard') }}">
+            <i class="fas fa-graduation-cap me-1"></i> SPK Beasiswa
+        </a>
+        <div class="ms-auto d-flex align-items-center">
+            <a href="{{ route('alternatives.index') }}" class="btn btn-outline-success me-2">
+                <i class="fas fa-users"></i> Alternatif
             </a>
-            <div class="ms-auto d-flex align-items-center"> {{-- Tambah align-items-center untuk vertikal alignment --}}
-                <a href="{{ route('alternatives.index') }}" class="btn btn-outline-success me-2">
-                    <i class="fas fa-users"></i> Alternatif
-                </a>
 
-                <a href="{{ route('criteria.index') }}" class="btn btn-outline-primary me-2">
-                    <i class="fas fa-list"></i> Kriteria
-                </a>
+            <a href="{{ route('criteria.index') }}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-list"></i> Kriteria
+            </a>
 
-                <div class="dropdown me-2"> {{-- Tambah margin kanan untuk dropdown ini --}}
-                    <button class="btn btn-info text-white dropdown-toggle" type="button" id="lihatHasilDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-chart-line"></i> Lihat Hasil
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="lihatHasilDropdown">
-                        <li><a class="dropdown-item" href="{{ route('alternatives.result-bayes') }}">BAYES</a></li>
-                        <li><a class="dropdown-item" href="{{ route('alternatives.result-moora') }}">MOORA</a></li>
-                        <li><a class="dropdown-item" href="{{ route('alternatives.result-mairca') }}">MAIRCA</a></li>
-                    </ul>
-                </div>
+            <div class="dropdown me-2">
+                <button class="btn btn-info text-white dropdown-toggle" type="button" id="lihatHasilDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-chart-line"></i> Lihat Hasil
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="lihatHasilDropdown">
+                    {{-- Link ke hasil kombinasi Bayes-MOORA --}}
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-bayes-moora') }}">
+                        <i class="fas fa-chart-pie me-2"></i> BAYES-MOORA
+                    </a></li>
+                    {{-- Link ke MAIRCA (jika tetap terpisah) --}}
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-mairca') }}">
+                        <i class="fas fa-chart-area me-2"></i> Hasil MAIRCA
+                    </a></li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
         <!-- Konten -->
         <main class="py-4">
