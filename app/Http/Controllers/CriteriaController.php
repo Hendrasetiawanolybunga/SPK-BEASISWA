@@ -47,6 +47,7 @@ class CriteriaController extends Controller
      */
     public function edit(Criteria $criteria)
     {
+        $criteria = Criteria::findorFail($criteria->id);
         return view('criteria.edit', compact('criteria'));
     }
 
@@ -56,13 +57,13 @@ class CriteriaController extends Controller
     public function update(Request $request, Criteria $criteria)
     {
         $request->validate([
-            'name' => 'required|string|unique:criterias,name,' . $criteria->id,
+            // 'name' => 'required|string|unique:criterias,name,' . $criteria->id,
             'type' => 'required|in:benefit,cost',
             'weight' => 'required|numeric|min:0|max:1',
-            'bayes_probability' => 'required|numeric|min:0|max:1',
+            // 'bayes_probability' => 'required|numeric|min:0|max:1',
         ]);
 
-        $criteria->update($request->only(['name', 'type', 'weight']));
+        $criteria->update($request->only(['type', 'weight']));
 
         return redirect()->route('criteria.index')
             ->with('success', 'Kriteria berhasil diperbarui.');
@@ -71,11 +72,11 @@ class CriteriaController extends Controller
     /**
      * Hapus kriteria.
      */
-    public function destroy(Criteria $criteria)
-    {
-        $criteria->delete();
+    // public function destroy(Criteria $criteria)
+    // {
+    //     $criteria->delete();
 
-        return redirect()->route('criteria.index')
-            ->with('success', 'Kriteria berhasil dihapus.');
-    }
+    //     return redirect()->route('criteria.index')
+    //         ->with('success', 'Kriteria berhasil dihapus.');
+    // }
 }

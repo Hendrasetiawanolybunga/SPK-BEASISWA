@@ -15,9 +15,9 @@
                 <i class="fas fa-balance-scale me-1"></i>Total Bobot:
                 <span id="bobot-summary" class="fw-bold"></span>
             </div>
-            <a href="{{ route('criteria.create') }}" class="btn btn-primary">
+            {{-- <a href="{{ route('criteria.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus-circle me-1"></i>Tambah Kriteria
-            </a>
+            </a> --}}
         </div>
 
         <div class="card shadow-sm border-0">
@@ -44,16 +44,16 @@
                                     <td class="bobot text-center">{{ $c->weight }}</td>
                                     <td class="text-center" class="text-center">
                                         <a href="{{ route('criteria.edit', $c->id) }}" class="btn btn-sm btn-warning me-1">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <form action="{{ route('criteria.destroy', $c->id) }}" method="POST"
+                                        {{-- <form action="{{ route('criteria.destroy', $c->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

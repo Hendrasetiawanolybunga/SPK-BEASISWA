@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-4">
         <h2 class="mb-4 text-center">
-            <i class="fas fa-pen-alt text-warning me-2"></i>Edit Kriteria
+            <i class="fas fa-pen-alt text-warning me-2"></i>Edit Kriteria {{ $criteria->name }}
         </h2>
 
         <form action="{{ route('criteria.update', $criteria->id) }}" method="POST" id="editCriteriaForm">
@@ -11,12 +11,12 @@
             @method('PUT')
 
             <div class="row g-4">
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-tag me-1"></i>Nama Kriteria
                     </label>
                     <input type="text" name="name" class="form-control" value="{{ $criteria->name }}" required>
-                </div>
+                </div> --}}
 
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">
