@@ -54,11 +54,13 @@
                             <select name="{{ $name }}" id="kondisi_ekonomi_select"
                                 class="form-select @error($name) is-invalid @enderror" required>
                                 <option value="">-- Pilih Kondisi Ekonomi --</option>
-                                <option value="sangat_buruk" {{ $oldValue == 'sangat_buruk' ? 'selected' : '' }}>Sangat Buruk</option>
+                                <option value="sangat_buruk" {{ $oldValue == 'sangat_buruk' ? 'selected' : '' }}>Sangat
+                                    Buruk</option>
                                 <option value="buruk" {{ $oldValue == 'buruk' ? 'selected' : '' }}>Buruk</option>
                                 <option value="cukup" {{ $oldValue == 'cukup' ? 'selected' : '' }}>Cukup</option>
                                 <option value="baik" {{ $oldValue == 'baik' ? 'selected' : '' }}>Baik</option>
-                                <option value="sangat_baik" {{ $oldValue == 'sangat_baik' ? 'selected' : '' }}>Sangat Baik</option>
+                                <option value="sangat_baik" {{ $oldValue == 'sangat_baik' ? 'selected' : '' }}>Sangat Baik
+                                </option>
                             </select>
                             @error($name)
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -113,10 +115,14 @@
                                 <select name="{{ $name }}" id="{{ Str::slug($criteria->name) }}"
                                     class="form-select @error($name) is-invalid @enderror" required>
                                     <option value="">-- Pilih Prestasi --</option>
-                                    <option value="juara_olimpiade" {{ $oldValue == 'juara_olimpiade' ? 'selected' : '' }}>Juara Olimpiade (Nasional/Internasional)</option>
-                                    <option value="juara_kelas" {{ $oldValue == 'juara_kelas' ? 'selected' : '' }}>Juara Kelas (Top 3)</option>
-                                    <option value="juara_lainnya" {{ $oldValue == 'juara_lainnya' ? 'selected' : '' }}>Juara Lainnya di Bidang Akademik</option>
-                                    <option value="tidak_ada_akademik" {{ $oldValue == 'tidak_ada_akademik' ? 'selected' : '' }}>Tidak Ada</option>
+                                    <option value="juara_olimpiade" {{ $oldValue == 'juara_olimpiade' ? 'selected' : '' }}>
+                                        Juara Olimpiade (Nasional/Internasional)</option>
+                                    <option value="juara_kelas" {{ $oldValue == 'juara_kelas' ? 'selected' : '' }}>Juara
+                                        Kelas (Top 3)</option>
+                                    <option value="juara_lainnya" {{ $oldValue == 'juara_lainnya' ? 'selected' : '' }}>
+                                        Juara Lainnya di Bidang Akademik</option>
+                                    <option value="tidak_ada_akademik"
+                                        {{ $oldValue == 'tidak_ada_akademik' ? 'selected' : '' }}>Tidak Ada</option>
                                 </select>
                             @elseif(Str::contains($lowerName, 'prestasi non-akademik'))
                                 <div class="form-check">
@@ -129,16 +135,21 @@
                                     <input class="form-check-input" type="radio" name="{{ $name }}"
                                         id="{{ Str::slug($criteria->name) }}_tidak_ada" value="tidak_ada"
                                         {{ $oldValue == 'tidak_ada' ? 'checked' : '' }} required>
-                                    <label class="form-check-label" for="{{ Str::slug($criteria->name) }}_tidak_ada">Tidak Ada</label>
+                                    <label class="form-check-label" for="{{ Str::slug($criteria->name) }}_tidak_ada">Tidak
+                                        Ada</label>
                                 </div>
                             @elseif(Str::contains($lowerName, 'keterlibatan masyarakat'))
                                 <select name="{{ $name }}" id="{{ Str::slug($criteria->name) }}"
                                     class="form-select @error($name) is-invalid @enderror" required>
                                     <option value="">-- Pilih Tingkat Keterlibatan --</option>
-                                    <option value="ketua" {{ $oldValue == 'ketua' ? 'selected' : '' }}>Ketua Organisasi/Komunitas</option>
-                                    <option value="pengurus" {{ $oldValue == 'pengurus' ? 'selected' : '' }}>Pengurus Organisasi/Komunitas</option>
-                                    <option value="anggota" {{ $oldValue == 'anggota' ? 'selected' : '' }}>Anggota Aktif Organisasi/Komunitas</option>
-                                    <option value="tidak_ada_keterlibatan" {{ $oldValue == 'tidak_ada_keterlibatan' ? 'selected' : '' }}>Tidak Ada</option>
+                                    <option value="ketua" {{ $oldValue == 'ketua' ? 'selected' : '' }}>Ketua
+                                        Organisasi/Komunitas</option>
+                                    <option value="pengurus" {{ $oldValue == 'pengurus' ? 'selected' : '' }}>Pengurus
+                                        Organisasi/Komunitas</option>
+                                    <option value="anggota" {{ $oldValue == 'anggota' ? 'selected' : '' }}>Anggota Aktif
+                                        Organisasi/Komunitas</option>
+                                    <option value="tidak_ada_keterlibatan"
+                                        {{ $oldValue == 'tidak_ada_keterlibatan' ? 'selected' : '' }}>Tidak Ada</option>
                                 </select>
                             @elseif(Str::contains($lowerName, ['domisili 3t', 'difabel']))
                                 <select name="{{ $name }}" id="{{ Str::slug($criteria->name) }}"
@@ -147,8 +158,10 @@
                                     <option value="0" {{ $oldValue == '0' ? 'selected' : '' }}>Tidak</option>
                                     <option value="1" {{ $oldValue == '1' ? 'selected' : '' }}>Ya</option>
                                 </select>
-                            @else {{-- Default untuk kriteria lain (misal: Jumlah Tanggungan) --}}
-                                <input type="number" step="any" name="{{ $name }}" id="{{ Str::slug($criteria->name) }}"
+                            @else
+                                {{-- Default untuk kriteria lain (misal: Jumlah Tanggungan) --}}
+                                <input type="number" step="any" name="{{ $name }}"
+                                    id="{{ Str::slug($criteria->name) }}"
                                     class="form-control @error($name) is-invalid @enderror"
                                     placeholder="Masukkan nilai (misal: 3 untuk tanggungan, 85 untuk nilai)"
                                     value="{{ $oldValue }}" required>
@@ -180,24 +193,54 @@
 
             // Definisi opsi penghasilan berdasarkan kondisi ekonomi
             const penghasilanOptions = {
-                'sangat_buruk': [
-                    { value: '<_1jt', text: '< Rp 1.000.000' },
-                    { value: '1jt_2.5jt', text: 'Rp 1.000.000 - Rp 2.500.000' }
+                'sangat_buruk': [{
+                        value: '<_1jt',
+                        text: '< Rp 1.000.000'
+                    },
+                    {
+                        value: '1jt_1.5jt',
+                        text: 'Rp 1.000.000 - Rp 1.500.000'
+                    }
                 ],
-                'buruk': [
-                    { value: '1jt_2.5jt', text: 'Rp 1.000.000 - Rp 2.500.000' },
-                    { value: '2.5jt_5jt', text: 'Rp 2.500.000 - Rp 5.000.000' }
+                'buruk': [{
+                        value: '1.5jt_2jt',
+                        text: 'Rp 1.500.000 - Rp 2.000.000'
+                    },
+                    {
+                        value: '2jt_2.5jt',
+                        text: 'Rp 2.000.000 - Rp 2.500.000'
+                    }
                 ],
-                'cukup': [
-                    { value: '2.5jt_5jt', text: 'Rp 2.500.000 - Rp 5.000.000' },
-                    { value: '5jt_10jt', text: 'Rp 5.000.000 - Rp 10.000.000' }
+                'cukup': [{
+                        value: '2.5jt_3jt',
+                        text: 'Rp 2.500.000 - Rp 3.000.000'
+                    },
+                    {
+                        value: '3jt_4jt',
+                        text: 'Rp 3.000.000 - Rp 4.000.000'
+                    }
                 ],
-                'baik': [
-                    { value: '5jt_10jt', text: 'Rp 5.000.000 - Rp 10.000.000' },
-                    { value: '>_10jt', text: '> Rp 10.000.000' }
+                'baik': [{
+                        value: '4jt_5jt',
+                        text: 'Rp 4.000.000 - Rp 5.000.000'
+                    },
+                    {
+                        value: '5jt_6jt',
+                        text: 'Rp 5.000.000 - Rp 6.000.000'
+                    }
                 ],
-                'sangat_baik': [
-                    { value: '>_10jt', text: '> Rp 10.000.000' }
+                'sangat_baik': [{
+                        value: '6jt_8jt',
+                        text: 'Rp 6.000.000 - Rp 8.000.000'
+                    },
+                    {
+                        value: '8jt_10jt',
+                        text: 'Rp 8.000.000 - Rp 10.000.000'
+                    },
+                    {
+                        value: '>_10jt',
+                        text: '> Rp 10.000.000'
+                    }
                 ]
             };
 
