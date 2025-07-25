@@ -19,28 +19,28 @@ class CriteriaController extends Controller
     /**
      * Form tambah kriteria.
      */
-    public function create()
-    {
-        return view('criteria.create');
-    }
+    // public function create()
+    // {
+    //     return view('criteria.create');
+    // }
 
     /**
      * Simpan kriteria baru.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|unique:criterias,name',
-            'type' => 'required|in:benefit,cost',
-            'weight' => 'required|numeric|min:0|max:1',
-            'bayes_probability' => 'required|numeric|min:0|max:1',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|unique:criterias,name',
+    //         'type' => 'required|in:benefit,cost',
+    //         'weight' => 'required|numeric|min:0|max:1',
+    //         'bayes_probability' => 'required|numeric|min:0|max:1',
+    //     ]);
 
-        Criteria::create($request->only(['name', 'type', 'weight']));
+    //     Criteria::create($request->only(['name', 'type', 'weight']));
 
-        return redirect()->route('criteria.index')
-            ->with('success', 'Kriteria berhasil ditambahkan.');
-    }
+    //     return redirect()->route('criteria.index')
+    //         ->with('success', 'Kriteria berhasil ditambahkan.');
+    // }
 
     /**
      * Form edit kriteria.
