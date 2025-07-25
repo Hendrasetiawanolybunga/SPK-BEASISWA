@@ -80,13 +80,13 @@
             <h4 class="mb-3">Ringkasan Proses Seleksi Awal (Naive Bayes)</h4>
             <div class="row justify-content-center">
                 <div class="col-md-4 summary-item">
-                    <strong>Total Kandidat Awal:</strong> <span class="badge bg-primary badge-lg">{{ $totalAlternatives }}</span>
+                    <strong>Total Kandidat Awal:</strong> <br><span class="badge bg-primary badge-lg">{{ $totalAlternatives }}</span>
                 </div>
                 <div class="col-md-4 summary-item">
-                    <strong>Lolos Penyaringan (LAYAK):</strong> <span class="badge bg-success badge-lg">{{ $layakCount }}</span>
+                    <strong>Lolos Penyaringan (LAYAK):</strong><br> <span class="badge bg-success badge-lg">{{ $layakCount }}</span>
                 </div>
                 <div class="col-md-4 summary-item">
-                    <strong>Tidak Lolos Penyaringan (TIDAK LAYAK):</strong> <span class="badge bg-danger badge-lg">{{ $tidakLayakCount }}</span>
+                    <strong>Tidak Lolos Penyaringan (TIDAK LAYAK):</strong> <br><span class="badge bg-danger badge-lg">{{ $tidakLayakCount }}</span>
                 </div>
             </div>
         </div>
