@@ -57,13 +57,20 @@ class CriteriaController extends Controller
     public function update(Request $request, Criteria $criteria)
     {
         $request->validate([
-            // 'name' => 'required|string|unique:criterias,name,' . $criteria->id,
             'type' => 'required|in:benefit,cost',
             'weight' => 'required|numeric|min:0|max:1',
-            // 'bayes_probability' => 'required|numeric|min:0|max:1',
         ]);
 
-        $criteria->update($request->only(['type', 'weight']));
+        $weight = $request->input('weight');
+
+        // Hitung bayes_probability secara dinamis
+        $bayesProbability = $this->calculateBayesProbability($weight);
+
+        $criteria->update([
+            'type' => $request->input('type'),
+            'weight' => $weight,
+            'bayes_probability' => $bayesProbability,
+        ]);
 
         return redirect()->route('criteria.index')
             ->with('success', 'Kriteria berhasil diperbarui.');
@@ -79,4 +86,28 @@ class CriteriaController extends Controller
     //     return redirect()->route('criteria.index')
     //         ->with('success', 'Kriteria berhasil dihapus.');
     // }
+
+    private function calculateBayesProbability($currentWeight)
+    {
+        // Ambil semua bobot dari database kecuali kriteria yang sedang di-update
+        $weights = Criteria::pluck('weight');
+
+        // Tentukan batas weight yang tersedia
+        $minWeight = $weights->min();
+        $maxWeight = $weights->max();
+
+        // Jika semua bobot sama, hindari pembagian nol
+        if ($minWeight == $maxWeight) {
+            return 0.90; // default tengah
+        }
+
+        // Rentang nilai probabilitas yang bisa disesuaikan (konfigurasi global)
+        $minProb = 0.80;
+        $maxProb = 0.98;
+
+        // Interpolasi linear otomatis
+        $prob = $minProb + ($currentWeight - $minWeight) * ($maxProb - $minProb) / ($maxWeight - $minWeight);
+
+        return round($prob, 2);
+    }
 }

@@ -18,50 +18,50 @@ class CriteriaSeeder extends Seeder
             [
                 'name' => 'Prestasi Akademik',
                 'type' => 'benefit',
-                'weight' => 0.16, // Disesuaikan dari 0.15
-                'bayes_probability' => 0.95
+                'weight' => 0.16,
+                'bayes_probability' => 0.98
             ],
             [
                 'name' => 'Prestasi Non-Akademik',
                 'type' => 'benefit',
-                'weight' => 0.11, // Disesuaikan dari 0.10
-                'bayes_probability' => 0.8
+                'weight' => 0.11,
+                'bayes_probability' => 0.83
             ],
             [
                 'name' => 'Domisili 3T',
                 'type' => 'benefit',
-                'weight' => 0.11, // Disesuaikan dari 0.10
-                'bayes_probability' => 0.9
+                'weight' => 0.11,
+                'bayes_probability' => 0.83
             ],
             [
                 'name' => 'Difabel',
                 'type' => 'benefit',
-                'weight' => 0.10, // Tetap
-                'bayes_probability' => 0.9
+                'weight' => 0.10,
+                'bayes_probability' => 0.80
             ],
             [
                 'name' => 'Keterlibatan Masyarakat',
                 'type' => 'benefit',
-                'weight' => 0.10, // Tetap
-                'bayes_probability' => 0.8
+                'weight' => 0.10,
+                'bayes_probability' => 0.80
             ],
             [
                 'name' => 'Kondisi Ekonomi',
                 'type' => 'cost',
-                'weight' => 0.10, // Tetap
-                'bayes_probability' => 0.95
+                'weight' => 0.10,
+                'bayes_probability' => 0.80
             ],
             [
                 'name' => 'Penghasilan Orang Tua',
                 'type' => 'cost',
-                'weight' => 0.16, // Disesuaikan dari 0.15
+                'weight' => 0.16,
                 'bayes_probability' => 0.98
             ],
             [
                 'name' => 'Jumlah Tanggungan Orang Tua',
                 'type' => 'benefit',
-                'weight' => 0.16, // Disesuaikan dari 0.15
-                'bayes_probability' => 0.85
+                'weight' => 0.16,
+                'bayes_probability' => 0.98
             ],
         ];
 
