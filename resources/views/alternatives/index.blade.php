@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h2 class="mb-3 text-center"><i class="fas fa-users me-2"></i>Data Calon Penerima Beasiswa</h2>
+        <h2 class="mb-3 text-center"><i class="fas fa-user-graduate me-2"></i> Kandidat Penerima Beasiswa</h2>
 
         @if (session('success'))
             <div class="alert alert-success text-center alert-dismissible fade show" role="alert">
@@ -49,7 +49,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0 text-primary">Daftar Kandidat</h5>
+                        <h5 class="mb-0 text-primary">Daftar Kandidat Penerima Beasiswa</h5>
                         <a href="{{ route('alternatives.create') }}" class="btn btn-success">
                             <i class="fas fa-plus-circle me-2"></i> Tambah Alternatif
                         </a>
@@ -58,18 +58,22 @@
                         <table class="table table-hover align-middle text-center">
                             <thead class="table-primary text-white">
                                 <tr>
-                                    <th class="text-nowrap">
+                                    <th class="text-nowrap align-middle">
                                         <i class="fas fa-user"></i> Nama
                                     </th>
 
                                     @foreach ($criterias as $criteria)
-                                        <th class="text-nowrap">
+                                        <th class="text-nowrap align-middle">
                                             {{ $criteria->name }}
-                                            <small class="d-block text-white-50">({{ ucfirst($criteria->type) }})</small>
+                                            @if ($criteria->type == 'benefit')
+                                                <small class="d-block text-success">({{ ucfirst($criteria->type) }})</small>
+                                            @else
+                                                <small class="d-block text-danger">({{ ucfirst($criteria->type) }})</small>
+                                            @endif
                                         </th>
                                     @endforeach
 
-                                    <th class="text-nowrap">
+                                    <th class="text-nowrap align-middle">
                                         <i class="fas fa-tools"></i> Aksi
                                     </th>
                                 </tr>
@@ -187,6 +191,10 @@
                                                         }
                                                     } elseif (Str::contains($lowerName, ['domisili 3t', 'difabel'])) {
                                                         $displayValue = $score->value == 1 ? 'Ya' : 'Tidak';
+                                                    } elseif (
+                                                        Str::contains($lowerName, 'jumlah tanggungan orang tua')
+                                                    ) {
+                                                        $displayValue = $score->value . ' orang';
                                                     } else {
                                                         $displayValue = $score->value;
                                                     }
@@ -199,7 +207,7 @@
                                         <td class="text-center text-nowrap">
                                             <a href="{{ route('alternatives.edit', $alt->id) }}"
                                                 class="btn btn-sm btn-warning me-1" title="Edit Data">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-edit"></i> Edit
                                             </a>
                                             <form action="{{ route('alternatives.destroy', $alt->id) }}" method="POST"
                                                 class="d-inline"
@@ -207,7 +215,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Hapus Data">
-                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="fas fa-trash-alt"></i> Delete
                                                 </button>
                                             </form>
                                         </td>
