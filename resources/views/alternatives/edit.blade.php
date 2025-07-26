@@ -105,36 +105,51 @@
                             $name,
                             $alternative->scores->where('criteria_id', $penghasilanOrtuCriteria->id)->first()?->value,
                         );
-                        // Convert numeric value back to string for select box
-                        $displayValueForPenghasilan = '';
-                        switch ($scoreValue) {
-                            case 1:
-                                $displayValueForPenghasilan = '<_1jt';
-                                break;
-                            case 2:
-                                $displayValueForPenghasilan = '1jt_2.5jt';
-                                break;
-                            case 3:
-                                $displayValueForPenghasilan = '2.5jt_5jt';
-                                break;
-                            case 4:
-                                $displayValueForPenghasilan = '5jt_10jt';
-                                break;
-                            case 5:
-                                $displayValueForPenghasilan = '>_10jt';
-                                break;
-                        }
+
+                        // Konversi nilai angka ke kode string
+                        $scoreToValueMap = [
+                            1 => '<_1jt',
+                            2 => '1jt_1.5jt',
+                            3 => '1.5jt_2jt',
+                            4 => '2jt_2.5jt',
+                            5 => '2.5jt_3jt',
+                            6 => '3jt_4jt',
+                            7 => '4jt_5jt',
+                            8 => '5jt_6jt',
+                            9 => '6jt_8jt',
+                            10 => '8jt_10jt',
+                            11 => '>_10jt',
+                        ];
+
+                        $displayValueForPenghasilan = $scoreToValueMap[$scoreValue] ?? '';
+                        $displayText = match ($displayValueForPenghasilan) {
+                            '<_1jt' => '< Rp 1.000.000',
+                            '1jt_1.5jt' => 'Rp 1.000.000 - Rp 1.500.000',
+                            '1.5jt_2jt' => 'Rp 1.500.000 - Rp 2.000.000',
+                            '2jt_2.5jt' => 'Rp 2.000.000 - Rp 2.500.000',
+                            '2.5jt_3jt' => 'Rp 2.500.000 - Rp 3.000.000',
+                            '3jt_4jt' => 'Rp 3.000.000 - Rp 4.000.000',
+                            '4jt_5jt' => 'Rp 4.000.000 - Rp 5.000.000',
+                            '5jt_6jt' => 'Rp 5.000.000 - Rp 6.000.000',
+                            '6jt_8jt' => 'Rp 6.000.000 - Rp 8.000.000',
+                            '8jt_10jt' => 'Rp 8.000.000 - Rp 10.000.000',
+                            '>_10jt' => '> Rp 10.000.000',
+                            default => 'Belum dipilih',
+                        };
                     @endphp
+
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="penghasilan_ortu_select" class="form-label fw-semibold">
                                 {{ $penghasilanOrtuCriteria->name }}
                                 <span class="text-muted">({{ ucfirst($penghasilanOrtuCriteria->type) }})</span>
                             </label>
-                            <select name="{{ $name }}" id="penghasilan_ortu_select"
-                                class="form-select @error($name) is-invalid @enderror" required disabled>
-                                <option value="">-- Pilih Kondisi Ekonomi Dulu --</option>
+                            <select id="penghasilan_ortu_select" class="form-select @error($name) is-invalid @enderror"
+                                required disabled>
+                                <option value="{{ $displayValueForPenghasilan }}" selected>{{ $displayText }}</option>
                             </select>
+                            <input type="hidden" name="{{ $name }}" id="penghasilan_hidden_input"
+                                value="{{ $displayValueForPenghasilan }}">
                             <small class="form-text text-muted">
                                 *Pilihan ini akan muncul setelah memilih Kondisi Ekonomi.
                             </small>
@@ -296,9 +311,15 @@
                 ]
             };
 
+            penghasilanOrtuSelect.addEventListener('change', function() {
+                const hiddenInput = document.getElementById('penghasilan_hidden_input');
+                hiddenInput.value = this.value;
+            });
+
             function updatePenghasilanOptions(selectedKondisiEkonomi, currentPenghasilanValue = null) {
                 penghasilanOrtuSelect.innerHTML = '<option value="">-- Pilih Nominal Penghasilan --</option>';
                 const options = penghasilanOptions[selectedKondisiEkonomi];
+                const hiddenInput = document.getElementById('penghasilan_hidden_input');
 
                 if (options) {
                     options.forEach(optionData => {
@@ -307,10 +328,11 @@
                         option.textContent = optionData.text;
                         if (currentPenghasilanValue && currentPenghasilanValue == optionData.value) {
                             option.selected = true;
+                            hiddenInput.value = optionData.value; // set hidden value saat load awal
                         }
                         penghasilanOrtuSelect.appendChild(option);
                     });
-                    // FIX: Typo corrected here
+
                     penghasilanOrtuSelect.disabled = false;
                 } else {
                     penghasilanOrtuSelect.disabled = true;

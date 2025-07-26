@@ -71,10 +71,14 @@
                     <li><a class="dropdown-item" href="{{ route('alternatives.result-bayes-moora') }}">
                         <i class="fas fa-chart-pie me-2"></i> BAYES-MOORA
                     </a></li>
-                    {{-- Link ke MAIRCA (jika tetap terpisah) --}}
+                    {{-- Link ke hasil kombinasi Bayes-MAIRCA --}}
+                    <li><a class="dropdown-item" href="{{ route('alternatives.result-bayes-mairca') }}">
+                        <i class="fas fa-chart-pie me-2"></i> BAYES-MAIRCA
+                    </a></li>
+                    {{-- Link ke MAIRCA (jika tetap terpisah)
                     <li><a class="dropdown-item" href="{{ route('alternatives.result-mairca') }}">
                         <i class="fas fa-chart-area me-2"></i> Hasil MAIRCA
-                    </a></li>
+                    </a></li> --}}
                 </ul>
             </div>
         </div>

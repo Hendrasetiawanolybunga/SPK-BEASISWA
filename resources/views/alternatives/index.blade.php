@@ -39,7 +39,8 @@
                         </div>
                     @else
                         <div class="alert alert-info text-center mt-4 py-3">
-                            <em>Anda sudah memiliki <strong>{{ $criterias->count() }}</strong> kriteria yang siap digunakan.</em>
+                            <em>Anda sudah memiliki <strong>{{ $criterias->count() }}</strong> kriteria yang siap
+                                digunakan.</em>
                         </div>
                     @endif
                 </div>
@@ -58,7 +59,7 @@
                             <thead class="table-primary text-white">
                                 <tr>
                                     <th class="text-nowrap">
-                                        <i class="fas fa-user"></i> Nama 
+                                        <i class="fas fa-user"></i> Nama
                                     </th>
 
                                     @foreach ($criterias as $criteria)
@@ -88,42 +89,104 @@
                                                 if ($score) {
                                                     if (Str::contains($lowerName, 'prestasi akademik')) {
                                                         switch ($score->value) {
-                                                            case 5: $displayValue = 'Juara Olimpiade'; break;
-                                                            case 4: $displayValue = 'Juara Kelas'; break;
-                                                            case 3: $displayValue = 'Juara Lainnya'; break;
-                                                            case 1: $displayValue = 'Tidak Ada'; break;
-                                                            default: $displayValue = $score->value; break;
+                                                            case 5:
+                                                                $displayValue = 'Juara Olimpiade';
+                                                                break;
+                                                            case 4:
+                                                                $displayValue = 'Juara Kelas';
+                                                                break;
+                                                            case 3:
+                                                                $displayValue = 'Juara Lainnya';
+                                                                break;
+                                                            case 1:
+                                                                $displayValue = 'Tidak Ada';
+                                                                break;
+                                                            default:
+                                                                $displayValue = $score->value;
+                                                                break;
                                                         }
                                                     } elseif (Str::contains($lowerName, 'prestasi non-akademik')) {
-                                                        $displayValue = ($score->value == 1) ? 'Ada' : 'Tidak Ada';
+                                                        $displayValue = $score->value == 1 ? 'Ada' : 'Tidak Ada';
                                                     } elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
                                                         switch ($score->value) {
-                                                            case 4: $displayValue = 'Ketua'; break;
-                                                            case 3: $displayValue = 'Pengurus'; break;
-                                                            case 2: $displayValue = 'Anggota Aktif'; break;
-                                                            case 1: $displayValue = 'Tidak Ada'; break;
-                                                            default: $displayValue = $score->value; break;
+                                                            case 4:
+                                                                $displayValue = 'Ketua';
+                                                                break;
+                                                            case 3:
+                                                                $displayValue = 'Pengurus';
+                                                                break;
+                                                            case 2:
+                                                                $displayValue = 'Anggota Aktif';
+                                                                break;
+                                                            case 1:
+                                                                $displayValue = 'Tidak Ada';
+                                                                break;
+                                                            default:
+                                                                $displayValue = $score->value;
+                                                                break;
                                                         }
                                                     } elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
                                                         switch ($score->value) {
-                                                            case 5: $displayValue = 'Sangat Buruk'; break;
-                                                            case 4: $displayValue = 'Buruk'; break;
-                                                            case 3: $displayValue = 'Cukup'; break;
-                                                            case 2: $displayValue = 'Baik'; break;
-                                                            case 1: $displayValue = 'Sangat Baik'; break;
-                                                            default: $displayValue = $score->value; break;
+                                                            case 5:
+                                                                $displayValue = 'Sangat Buruk';
+                                                                break;
+                                                            case 4:
+                                                                $displayValue = 'Buruk';
+                                                                break;
+                                                            case 3:
+                                                                $displayValue = 'Cukup';
+                                                                break;
+                                                            case 2:
+                                                                $displayValue = 'Baik';
+                                                                break;
+                                                            case 1:
+                                                                $displayValue = 'Sangat Baik';
+                                                                break;
+                                                            default:
+                                                                $displayValue = $score->value;
+                                                                break;
                                                         }
                                                     } elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
                                                         switch ($score->value) {
-                                                            case 1: $displayValue = '< Rp 1.000.000'; break;
-                                                            case 2: $displayValue = 'Rp 1.000.000 - Rp 2.500.000'; break;
-                                                            case 3: $displayValue = 'Rp 2.500.000 - Rp 5.000.000'; break;
-                                                            case 4: $displayValue = 'Rp 5.000.000 - Rp 10.000.000'; break;
-                                                            case 5: $displayValue = '> Rp 10.000.000'; break;
-                                                            default: $displayValue = $score->value; break;
+                                                            case 1:
+                                                                $displayValue = '< Rp 1.000.000';
+                                                                break;
+                                                            case 2:
+                                                                $displayValue = 'Rp 1.000.000 - Rp 1.500.000';
+                                                                break;
+                                                            case 3:
+                                                                $displayValue = 'Rp 1.500.000 - Rp 2.000.000';
+                                                                break;
+                                                            case 4:
+                                                                $displayValue = 'Rp 2.000.000 - Rp 2.500.000';
+                                                                break;
+                                                            case 5:
+                                                                $displayValue = 'Rp 2.500.000 - Rp 3.000.000';
+                                                                break;
+                                                            case 6:
+                                                                $displayValue = 'Rp 3.000.000 - Rp 4.000.000';
+                                                                break;
+                                                            case 7:
+                                                                $displayValue = 'Rp 4.000.000 - Rp 5.000.000';
+                                                                break;
+                                                            case 8:
+                                                                $displayValue = 'Rp 5.000.000 - Rp 6.000.000';
+                                                                break;
+                                                            case 9:
+                                                                $displayValue = 'Rp 6.000.000 - Rp 8.000.000';
+                                                                break;
+                                                            case 10:
+                                                                $displayValue = 'Rp 8.000.000 - Rp 10.000.000';
+                                                                break;
+                                                            case 11:
+                                                                $displayValue = '> Rp 10.000.000';
+                                                                break;
+                                                            default:
+                                                                $displayValue = 'Tidak Diketahui';
+                                                                break;
                                                         }
                                                     } elseif (Str::contains($lowerName, ['domisili 3t', 'difabel'])) {
-                                                        $displayValue = ($score->value == 1) ? 'Ya' : 'Tidak';
+                                                        $displayValue = $score->value == 1 ? 'Ya' : 'Tidak';
                                                     } else {
                                                         $displayValue = $score->value;
                                                     }
@@ -139,7 +202,8 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('alternatives.destroy', $alt->id) }}" method="POST"
-                                                class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                class="d-inline"
+                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Hapus Data">

@@ -19,11 +19,16 @@ class AlternativeController extends Controller
         // Handle Prestasi Akademik
         if (Str::contains($lowerName, 'prestasi akademik')) {
             switch ($inputValue) {
-                case 'juara_olimpiade': return 5;
-                case 'juara_kelas': return 4;
-                case 'juara_lainnya': return 3;
-                case 'tidak_ada_akademik': return 1;
-                default: return 0;
+                case 'juara_olimpiade':
+                    return 5;
+                case 'juara_kelas':
+                    return 4;
+                case 'juara_lainnya':
+                    return 3;
+                case 'tidak_ada_akademik':
+                    return 1;
+                default:
+                    return 0;
             }
         }
         // Handle Prestasi Non-Akademik
@@ -33,33 +38,62 @@ class AlternativeController extends Controller
         // Handle Keterlibatan Masyarakat
         elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
             switch ($inputValue) {
-                case 'ketua': return 4;
-                case 'pengurus': return 3;
-                case 'anggota': return 2;
-                case 'tidak_ada_keterlibatan': return 1;
-                default: return 0;
+                case 'ketua':
+                    return 4;
+                case 'pengurus':
+                    return 3;
+                case 'anggota':
+                    return 2;
+                case 'tidak_ada_keterlibatan':
+                    return 1;
+                default:
+                    return 0;
             }
         }
         // Handle Kondisi Ekonomi (input string, output kategori numerik)
         elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
             switch ($inputValue) {
-                case 'sangat_buruk': return 5;
-                case 'buruk': return 4;
-                case 'cukup': return 3;
-                case 'baik': return 2;
-                case 'sangat_baik': return 1;
-                default: return 0;
+                case 'sangat_buruk':
+                    return 5;
+                case 'buruk':
+                    return 4;
+                case 'cukup':
+                    return 3;
+                case 'baik':
+                    return 2;
+                case 'sangat_baik':
+                    return 1;
+                default:
+                    return 0;
             }
         }
         // Handle Penghasilan Orang Tua (input string rentang, output kategori numerik)
         elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
             switch ($inputValue) {
-                case '<_1jt': return 1; // < Rp 1.000.000
-                case '1jt_2.5jt': return 2; // Rp 1.000.000 - Rp 2.500.000
-                case '2.5jt_5jt': return 3; // Rp 2.500.000 - Rp 5.000.000
-                case '5jt_10jt': return 4; // Rp 5.000.000 - Rp 10.000.000
-                case '>_10jt': return 5; // > Rp 10.000.000
-                default: return 0;
+                case '<_1jt':
+                    return 1; // < Rp 1.000.000
+                case '1jt_1.5jt':
+                    return 2; // Rp 1.000.000 - Rp 1.500.000
+                case '1.5jt_2jt':
+                    return 3; // Rp 1.500.000 - Rp 2.000.000
+                case '2jt_2.5jt':
+                    return 4; // Rp 2.000.000 - Rp 2.500.000
+                case '2.5jt_3jt':
+                    return 5; // Rp 2.500.000 - Rp 3.000.000
+                case '3jt_4jt':
+                    return 6; // Rp 3.000.000 - Rp 4.000.000
+                case '4jt_5jt':
+                    return 7; // Rp 4.000.000 - Rp 5.000.000
+                case '5jt_6jt':
+                    return 8; // Rp 5.000.000 - Rp 6.000.000
+                case '6jt_8jt':
+                    return 9; // Rp 6.000.000 - Rp 8.000.000
+                case '8jt_10jt':
+                    return 10; // Rp 8.000.000 - Rp 10.000.000
+                case '>_10jt':
+                    return 11; // > Rp 10.000.000
+                default:
+                    return null; // atau bisa throw exception jika perlu validasi
             }
         }
         // Handle Domisili 3T dan Difabel (input 0 atau 1)
@@ -87,7 +121,7 @@ class AlternativeController extends Controller
         $kondisiEkonomiCriteria = $allCriterias->firstWhere('name', 'Kondisi Ekonomi');
         $penghasilanOrtuCriteria = $allCriterias->firstWhere('name', 'Penghasilan Orang Tua');
         // Filter kriteria lainnya
-        $otherCriterias = $allCriterias->filter(function($criteria) {
+        $otherCriterias = $allCriterias->filter(function ($criteria) {
             return !Str::contains(Str::lower($criteria->name), ['kondisi ekonomi', 'penghasilan orang tua']);
         });
 
@@ -110,7 +144,9 @@ class AlternativeController extends Controller
             if ($request->has('scores') && is_array($request->scores)) {
                 foreach ($request->scores as $criteria_id => $inputValue) {
                     $criteria = Criteria::find($criteria_id);
-                    if (!$criteria) { continue; }
+                    if (!$criteria) {
+                        continue;
+                    }
 
                     $valueToStore = $this->mapCriteriaValue($criteria->name, $inputValue);
 
@@ -134,16 +170,30 @@ class AlternativeController extends Controller
 
     public function edit(Alternative $alternative)
     {
+        // Ambil semua kriteria
         $allCriterias = Criteria::all();
-        // Pisahkan kriteria Kondisi Ekonomi dan Penghasilan Orang Tua
-        $kondisiEkonomiCriteria = $allCriterias->firstWhere('name', 'Kondisi Ekonomi');
-        $penghasilanOrtuCriteria = $allCriterias->firstWhere('name', 'Penghasilan Orang Tua');
-        // Filter kriteria lainnya
-        $otherCriterias = $allCriterias->filter(function($criteria) {
-            return !Str::contains(Str::lower($criteria->name), ['kondisi ekonomi', 'penghasilan orang tua']);
+
+        // Ambil berdasarkan nama pasti
+        $kondisiEkonomiCriteria = $allCriterias->firstWhere(fn($c) => Str::lower($c->name) === 'kondisi ekonomi');
+        $penghasilanOrtuCriteria = $allCriterias->firstWhere(fn($c) => Str::lower($c->name) === 'penghasilan orang tua');
+
+        // Filter kriteria lain selain "Kondisi Ekonomi" dan "Penghasilan Orang Tua"
+        $otherCriterias = $allCriterias->filter(function ($criteria) {
+            $lowerName = Str::lower($criteria->name);
+            return !Str::contains($lowerName, ['kondisi ekonomi', 'penghasilan orang tua']);
         });
 
-        return view('alternatives.edit', compact('alternative', 'kondisiEkonomiCriteria', 'penghasilanOrtuCriteria', 'otherCriterias'));
+        // Validasi keberadaan kriteria penting
+        if (!$kondisiEkonomiCriteria || !$penghasilanOrtuCriteria) {
+            return redirect()->route('alternatives.index')->with('error', 'Kriteria wajib tidak ditemukan.');
+        }
+
+        return view('alternatives.edit', compact(
+            'alternative',
+            'kondisiEkonomiCriteria',
+            'penghasilanOrtuCriteria',
+            'otherCriterias'
+        ));
     }
 
     public function update(Request $request, Alternative $alternative)
@@ -160,7 +210,9 @@ class AlternativeController extends Controller
             if ($request->has('scores') && is_array($request->scores)) {
                 foreach ($request->scores as $criteria_id => $inputValue) {
                     $criteria = Criteria::find($criteria_id);
-                    if (!$criteria) { continue; }
+                    if (!$criteria) {
+                        continue;
+                    }
 
                     $valueToStore = $this->mapCriteriaValue($criteria->name, $inputValue);
 
@@ -462,24 +514,14 @@ class AlternativeController extends Controller
         ]);
     }
 
-    // Metode result_mairca() tetap seperti sebelumnya
-    public function result_mairca()
+    private function calculateMairca($alternatives, $criterias)
     {
-        $criterias = Criteria::all();
         $totalCriteria = $criterias->count();
-
-        $alternatives = Alternative::with('scores')->get();
-
-        $validAlternatives = [];
         $matrix = [];
+        $validAlternatives = [];
 
         foreach ($alternatives as $alt) {
             $scores = $alt->scores->keyBy('criteria_id');
-
-            if ($scores->count() < $totalCriteria) {
-                continue;
-            }
-
             $row = [];
             $isComplete = true;
 
@@ -497,12 +539,13 @@ class AlternativeController extends Controller
             }
         }
 
-        $n = count($validAlternatives);
-        if ($n === 0) {
-            return view('alternatives.result-mairca', ['scores' => []]);
+        if (empty($matrix)) {
+            return [];
         }
 
+        $n = count($validAlternatives);
         $norm = [];
+
         foreach ($criterias as $j => $c) {
             $column = array_column($matrix, $j);
             $max = max($column);
@@ -524,18 +567,56 @@ class AlternativeController extends Controller
             }
         }
 
-        $deviasi = [];
+        $deviation = [];
         foreach ($norm as $i => $row) {
             $total = 0;
             foreach ($row as $j => $val) {
                 $diff = abs($Q[$i][$j] - $val);
                 $total += $diff;
             }
-            $deviasi[] = ['alt' => $validAlternatives[$i], 'score' => $total];
+            $deviation[] = ['alt' => $validAlternatives[$i], 'score' => $total];
         }
 
-        usort($deviasi, fn($a, $b) => $a['score'] <=> $b['score']);
+        usort($deviation, fn($a, $b) => $a['score'] <=> $b['score']);
 
-        return view('alternatives.result-mairca', ['scores' => $deviasi]);
+        return $deviation;
+    }
+
+    public function result_bayes_mairca()
+    {
+        $criterias = Criteria::all();
+        $alternatives = Alternative::with('scores')->get();
+
+        if ($alternatives->isEmpty() || $criterias->isEmpty()) {
+            return view('alternatives.result-bayes-mairca', [
+                'bayesResults' => [],
+                'maircaRankings' => [],
+                'totalAlternatives' => 0,
+                'layakCount' => 0,
+                'tidakLayakCount' => 0,
+                'layakAlternatives' => collect([]),
+                'tidakLayakAlternatives' => collect([]),
+            ]);
+        }
+
+        // 1. Hitung klasifikasi Naive Bayes
+        $bayesOutput = $this->calculateBayes($alternatives, $criterias);
+
+        $bayesScores = $bayesOutput['bayes_scores'];
+        $layakAlternatives = $bayesOutput['layak_alternatives'];
+        $tidakLayakAlternatives = $bayesOutput['tidak_layak_alternatives'];
+
+        // 2. Hitung MAIRCA hanya untuk yang "LAYAK"
+        $maircaRankings = $this->calculateMairca($layakAlternatives, $criterias);
+
+        return view('alternatives.result-bayes-mairca', [
+            'bayesResults' => $bayesScores,
+            'maircaRankings' => $maircaRankings,
+            'totalAlternatives' => $alternatives->count(),
+            'layakCount' => $layakAlternatives->count(),
+            'tidakLayakCount' => $tidakLayakAlternatives->count(),
+            'layakAlternatives' => $layakAlternatives,
+            'tidakLayakAlternatives' => $tidakLayakAlternatives,
+        ]);
     }
 }

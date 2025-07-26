@@ -28,11 +28,12 @@ Route::middleware(['auth:admin'])->group(function () {
         // Rute lama untuk Bayes dan MOORA akan dihapus atau tidak digunakan di navbar
         // Route::get('/result-bayes', [AlternativeController::class, 'result_bayes'])->name('result-bayes');
         // Route::get('/result-moora', [AlternativeController::class, 'result-moora'])->name('result-moora');
-
-        Route::get('/result-mairca', [AlternativeController::class, 'result_mairca'])->name('result-mairca');
+        // Route::get('/result-mairca', [AlternativeController::class, 'result_mairca'])->name('result-mairca');
 
         // Rute BARU untuk Hasil Kombinasi Bayes-MOORA
         Route::get('/result-bayes-moora', [AlternativeController::class, 'result_bayes_moora'])->name('result-bayes-moora');
+        // Rute BARU untuk Hasil Kombinasi Bayes-MAIRCA
+        Route::get('/result-bayes-mairca', [AlternativeController::class, 'result_bayes_mairca'])->name('result-bayes-mairca');
     });
 
     // Rute Sumber Daya Kriteria

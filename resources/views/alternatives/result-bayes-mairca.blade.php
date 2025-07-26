@@ -82,7 +82,7 @@
 
     <div class="container mt-4">
         <h2 class="mb-4 text-center">📊 Hasil Rekomendasi Penerima Beasiswa</h2>
-        <p class="text-center lead text-muted">Kombinasi Metode Naive Bayes & MOORA</p>
+        <p class="text-center lead text-muted">Kombinasi Metode Naive Bayes & MAIRCA</p>
 
         @if ($totalAlternatives === 0)
             <div class="alert alert-warning text-center">
@@ -109,12 +109,12 @@
                 </div>
             </div>
 
-            @if (empty($mooraRankings))
+            @if (empty($maircaRankings))
                 <div class="alert alert-info text-center">
-                    <strong>ℹ️ Tidak ada alternatif yang lolos penyaringan Naive Bayes untuk dihitung dengan MOORA.</strong>
+                    <strong>ℹ️ Tidak ada alternatif yang lolos penyaringan Naive Bayes untuk dihitung dengan MAIRCA.</strong>
                 </div>
             @else
-                <h3 class="mb-3 mt-5 text-center">Ranking Akhir (MOORA) untuk Kandidat LAYAK</h3>
+                <h3 class="mb-3 mt-5 text-center">Ranking Akhir (MAIRCA) untuk Kandidat LAYAK</h3>
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -123,13 +123,13 @@
                                     <tr>
                                         <th class="text-nowrap">🏆 Peringkat</th>
                                         <th class="text-nowrap">👤 Nama Alternatif</th>
-                                        <th class="text-nowrap">📈 Skor MOORA Akhir<br>
-                                            <small class="text-white-50 fst-italic">(semakin tinggi semakin baik)</small>
+                                        <th class="text-nowrap">📈 Skor MAIRCA Akhir<br>
+                                            <small class="text-white-50 fst-italic">(semakin rendah semakin baik)</small>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($mooraRankings as $index => $item)
+                                    @foreach ($maircaRankings as $index => $item)
                                         <tr @if ($index == 0) class="table-success fw-bold" @endif>
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $item['alt']->name }}</td>
@@ -142,9 +142,9 @@
 
                         <div class="alert alert-success mt-4 text-center">
                             <h5 class="mb-2">🏅 <strong>Alternatif Terbaik:</strong></h5>
-                            <p class="fs-5 mb-0">{{ $mooraRankings[0]['alt']->name }}<br>
-                                <span class="text-muted">Skor MOORA Tertinggi:
-                                    {{ number_format($mooraRankings[0]['score'], 4) }}</span>
+                            <p class="fs-5 mb-0">{{ $maircaRankings[0]['alt']->name }}<br>
+                                <span class="text-muted">Skor MAIRCA Terendah:
+                                    {{ number_format($maircaRankings[0]['score'], 4) }}</span>
                             </p>
                         </div>
                     </div>
