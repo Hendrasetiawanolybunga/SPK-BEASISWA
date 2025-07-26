@@ -11,13 +11,6 @@
             @method('PUT')
 
             <div class="row g-4">
-                {{-- <div class="col-md-6">
-                    <label class="form-label fw-semibold">
-                        <i class="fas fa-tag me-1"></i>Nama Kriteria
-                    </label>
-                    <input type="text" name="name" class="form-control" value="{{ $criteria->name }}" required>
-                </div> --}}
-
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">
                         <i class="fas fa-layer-group me-1"></i>Jenis Kriteria
@@ -76,7 +69,8 @@
                 if ((otherTotal + newWeight) > 1.001) {
                     e.preventDefault();
                     alert(
-                        `Total bobot akan melebihi 1!\n\nSaat ini bobot dari kriteria lain sudah ${otherTotal.toFixed(2)}.\nSilakan kurangi bobot atau edit kriteria lain terlebih dahulu.`);
+                        `Total bobot akan melebihi 1!\n\nSaat ini bobot dari kriteria lain sudah ${otherTotal.toFixed(2)}.\nSilakan kurangi bobot atau edit kriteria lain terlebih dahulu.`
+                        );
                 }
             });
         });

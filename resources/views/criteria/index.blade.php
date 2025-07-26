@@ -46,20 +46,13 @@
                                         <a href="{{ route('criteria.edit', $c->id) }}" class="btn btn-sm btn-warning me-1">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        {{-- <form action="{{ route('criteria.destroy', $c->id) }}" method="POST"
-                                            class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach
                             @if ($criterias->isEmpty())
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted fst-italic">Belum ada data kriteria.</td>
+                                    <td colspan="4" class="text-center text-muted fst-italic">Belum ada data kriteria.
+                                    </td>
                                 </tr>
                             @endif
                         </tbody>

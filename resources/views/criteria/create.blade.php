@@ -82,7 +82,8 @@
                 if ((existingTotal + newWeight) > 1.001) {
                     e.preventDefault();
                     alert(
-                        `Total bobot akan melebihi 1! Silakan kurangi bobot atau hapus kriteria lain terlebih dahulu.`);
+                        `Total bobot akan melebihi 1! Silakan kurangi bobot atau hapus kriteria lain terlebih dahulu.`
+                        );
                 }
             });
         });

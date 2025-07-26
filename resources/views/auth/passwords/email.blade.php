@@ -1,5 +1,6 @@
     <!DOCTYPE html>
     <html lang="id">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,7 @@
                 min-height: 100vh;
                 margin: 0;
             }
+
             .card-custom {
                 background-color: #ffffff;
                 padding: 2.5rem;
@@ -26,25 +28,30 @@
                 width: 100%;
                 max-width: 450px;
             }
+
             .form-control:focus {
                 border-color: #0d6efd;
                 box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
             }
+
             .btn-primary {
                 background-color: #0d6efd;
                 border-color: #0d6efd;
                 transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
             }
+
             .btn-primary:hover {
                 background-color: #0b5ed7;
                 border-color: #0a58ca;
                 transform: translateY(-2px);
             }
+
             .alert {
                 border-radius: 0.5rem;
             }
         </style>
     </head>
+
     <body>
         <div class="container">
             <div class="row justify-content-center">
@@ -55,7 +62,8 @@
                         @if (session('status'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('status') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
                         @endif
 
@@ -66,7 +74,8 @@
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
                         @endif
 
@@ -74,8 +83,11 @@
                             @csrf
 
                             <div class="mb-4">
-                                <label for="email" class="form-label fw-semibold text-muted">Alamat Email atau Username</label>
-                                <input id="email" type="text" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <label for="email" class="form-label fw-semibold text-muted">Alamat Email atau
+                                    Username</label>
+                                <input id="email" type="text"
+                                    class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -103,5 +115,5 @@
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
+
     </html>
-    

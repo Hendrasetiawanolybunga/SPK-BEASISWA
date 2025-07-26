@@ -111,7 +111,8 @@
 
             @if (empty($maircaRankings))
                 <div class="alert alert-info text-center">
-                    <strong>ℹ️ Tidak ada alternatif yang lolos penyaringan Naive Bayes untuk dihitung dengan MAIRCA.</strong>
+                    <strong>ℹ️ Tidak ada alternatif yang lolos penyaringan Naive Bayes untuk dihitung dengan
+                        MAIRCA.</strong>
                 </div>
             @else
                 <h3 class="mb-3 mt-5 text-center">Ranking Akhir (MAIRCA) untuk Kandidat LAYAK</h3>
