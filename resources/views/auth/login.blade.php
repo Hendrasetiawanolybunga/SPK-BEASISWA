@@ -313,6 +313,9 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="fas fa-sign-in-alt me-2"></i> Login
                             </button>
+                            <a href="/" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i> Kembali ke Dashboard
+                            </a>
                         </div>
                     </form>
                 </div>

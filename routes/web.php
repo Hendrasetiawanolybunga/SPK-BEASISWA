@@ -6,6 +6,9 @@ use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+Route::get('/', [DashboardController::class, 'home'])->name('home');
 
 // Rute untuk Login dan Logout (tidak memerlukan otentikasi)
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

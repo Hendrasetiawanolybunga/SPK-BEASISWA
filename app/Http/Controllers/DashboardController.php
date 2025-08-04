@@ -1,24 +1,28 @@
 <?php
 
-    namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-    use App\Models\Alternative; // Pastikan model Alternative ada
-    use App\Models\Criteria;    // Pastikan model Criteria ada
-    use Illuminate\Http\Request;
+use App\Models\Alternative; // Pastikan model Alternative ada
+use App\Models\Criteria;    // Pastikan model Criteria ada
+use Illuminate\Http\Request;
 
-    class DashboardController extends Controller
+class DashboardController extends Controller
+{
+    /**
+     * Tampilkan halaman dashboard admin.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
-        /**
-         * Tampilkan halaman dashboard admin.
-         *
-         * @return \Illuminate\View\View
-         */
-        public function index()
-        {
-            $totalAlternatives = Alternative::count();
-            $totalCriterias = Criteria::count();
+        $totalAlternatives = Alternative::count();
+        $totalCriterias = Criteria::count();
 
-            return view('dashboard', compact('totalAlternatives', 'totalCriterias'));
-        }
+        return view('dashboard', compact('totalAlternatives', 'totalCriterias'));
     }
-    
+
+    public function home()
+    {
+        return view('home');
+    }
+}
