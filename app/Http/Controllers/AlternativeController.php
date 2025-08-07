@@ -2,125 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Alternative;
 use App\Models\Criteria;
 use App\Models\Score;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AlternativeController extends Controller
 {
-    // Fungsi pembantu untuk memetakan nilai input string/nominal ke nilai numerik untuk MOORA/Bayes
     private function mapCriteriaValue($criteriaName, $inputValue)
     {
         $lowerName = Str::lower($criteriaName);
-
-        // Handle Prestasi Akademik
         if (Str::contains($lowerName, 'prestasi akademik')) {
             switch ($inputValue) {
-                case 'juara_olimpiade':
-                    return 5;
-                case 'juara_kelas':
-                    return 4;
-                case 'juara_lainnya':
-                    return 3;
-                case 'tidak_ada_akademik':
-                    return 1;
-                default:
-                    return 0;
+                case 'juara_olimpiade': return 5;
+                case 'juara_kelas': return 4;
+                case 'juara_lainnya': return 3;
+                case 'tidak_ada_akademik': return 1;
+                default: return 0;
             }
-        }
-        // Handle Prestasi Non-Akademik
-        elseif (Str::contains($lowerName, 'prestasi non-akademik')) {
+        } elseif (Str::contains($lowerName, 'prestasi non-akademik')) {
             return ($inputValue == 'ada') ? 1 : 0;
-        }
-        // Handle Keterlibatan Masyarakat
-        elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
+        } elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
             switch ($inputValue) {
-                case 'ketua':
-                    return 4;
-                case 'pengurus':
-                    return 3;
-                case 'anggota':
-                    return 2;
-                case 'tidak_ada_keterlibatan':
-                    return 1;
-                default:
-                    return 0;
+                case 'ketua': return 4;
+                case 'pengurus': return 3;
+                case 'anggota': return 2;
+                case 'tidak_ada_keterlibatan': return 1;
+                default: return 0;
             }
-        }
-        // Handle Kondisi Ekonomi (input string, output kategori numerik)
-        elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
+        } elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
             switch ($inputValue) {
-                case 'sangat_buruk':
-                    return 5;
-                case 'buruk':
-                    return 4;
-                case 'cukup':
-                    return 3;
-                case 'baik':
-                    return 2;
-                case 'sangat_baik':
-                    return 1;
-                default:
-                    return 0;
+                case 'sangat_buruk': return 5;
+                case 'buruk': return 4;
+                case 'cukup': return 3;
+                case 'baik': return 2;
+                case 'sangat_baik': return 1;
+                default: return 0;
             }
-        }
-        // Handle Penghasilan Orang Tua (input string rentang, output kategori numerik)
-        elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
+        } elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
             switch ($inputValue) {
-                case '<_1jt':
-                    return 1; // < Rp 1.000.000
-                case '1jt_1.5jt':
-                    return 2; // Rp 1.000.000 - Rp 1.500.000
-                case '1.5jt_2jt':
-                    return 3; // Rp 1.500.000 - Rp 2.000.000
-                case '2jt_2.5jt':
-                    return 4; // Rp 2.000.000 - Rp 2.500.000
-                case '2.5jt_3jt':
-                    return 5; // Rp 2.500.000 - Rp 3.000.000
-                case '3jt_4jt':
-                    return 6; // Rp 3.000.000 - Rp 4.000.000
-                case '4jt_5jt':
-                    return 7; // Rp 4.000.000 - Rp 5.000.000
-                case '5jt_6jt':
-                    return 8; // Rp 5.000.000 - Rp 6.000.000
-                case '6jt_8jt':
-                    return 9; // Rp 6.000.000 - Rp 8.000.000
-                case '8jt_10jt':
-                    return 10; // Rp 8.000.000 - Rp 10.000.000
-                case '>_10jt':
-                    return 11; // > Rp 10.000.000
-                default:
-                    return null; // atau bisa throw exception jika perlu validasi
+                case '<_1jt': return 1;
+                case '1jt_1.5jt': return 2;
+                case '1.5jt_2jt': return 3;
+                case '2jt_2.5jt': return 4;
+                case '2.5jt_3jt': return 5;
+                case '3jt_4jt': return 6;
+                case '4jt_5jt': return 7;
+                case '5jt_6jt': return 8;
+                case '6jt_8jt': return 9;
+                case '8jt_10jt': return 10;
+                case '>_10jt': return 11;
+                default: return null;
             }
-        }
-        // Handle Domisili 3T dan Difabel (input 0 atau 1)
-        elseif (Str::contains($lowerName, ['domisili 3t', 'difabel'])) {
+        } elseif (Str::contains($lowerName, ['domisili 3t', 'difabel'])) {
             return (int) $inputValue;
-        }
-        // Default untuk kriteria lain (misal: Jumlah Tanggungan) yang sudah numerik
-        else {
+        } else {
             return (float) $inputValue;
         }
     }
 
-
     public function index()
     {
         $alternatives = Alternative::with('scores.criteria')->get();
-        $criterias = Criteria::all(); // Tetap ambil semua kriteria untuk tabel index
+        $criterias = Criteria::all();
         return view('alternatives.index', compact('alternatives', 'criterias'));
     }
 
     public function create()
     {
         $allCriterias = Criteria::all();
-        // Pisahkan kriteria Kondisi Ekonomi dan Penghasilan Orang Tua
         $kondisiEkonomiCriteria = $allCriterias->firstWhere('name', 'Kondisi Ekonomi');
         $penghasilanOrtuCriteria = $allCriterias->firstWhere('name', 'Penghasilan Orang Tua');
-        // Filter kriteria lainnya
         $otherCriterias = $allCriterias->filter(function ($criteria) {
             return !Str::contains(Str::lower($criteria->name), ['kondisi ekonomi', 'penghasilan orang tua']);
         });
@@ -135,7 +89,6 @@ class AlternativeController extends Controller
         ]);
 
         DB::beginTransaction();
-
         try {
             $alt = Alternative::create([
                 'name' => $request->name
@@ -170,20 +123,15 @@ class AlternativeController extends Controller
 
     public function edit(Alternative $alternative)
     {
-        // Ambil semua kriteria
         $allCriterias = Criteria::all();
-
-        // Ambil berdasarkan nama pasti
         $kondisiEkonomiCriteria = $allCriterias->firstWhere(fn($c) => Str::lower($c->name) === 'kondisi ekonomi');
         $penghasilanOrtuCriteria = $allCriterias->firstWhere(fn($c) => Str::lower($c->name) === 'penghasilan orang tua');
 
-        // Filter kriteria lain selain "Kondisi Ekonomi" dan "Penghasilan Orang Tua"
         $otherCriterias = $allCriterias->filter(function ($criteria) {
             $lowerName = Str::lower($criteria->name);
             return !Str::contains($lowerName, ['kondisi ekonomi', 'penghasilan orang tua']);
         });
 
-        // Validasi keberadaan kriteria penting
         if (!$kondisiEkonomiCriteria || !$penghasilanOrtuCriteria) {
             return redirect()->route('alternatives.index')->with('error', 'Kriteria wajib tidak ditemukan.');
         }
@@ -203,7 +151,6 @@ class AlternativeController extends Controller
         ]);
 
         DB::beginTransaction();
-
         try {
             $alternative->update(['name' => $request->name]);
 
@@ -218,7 +165,6 @@ class AlternativeController extends Controller
 
                     if ($valueToStore !== null && $valueToStore !== '') {
                         $score = $alternative->scores()->where('criteria_id', $criteria_id)->first();
-
                         if ($score) {
                             $score->update(['value' => $valueToStore]);
                         } else {
@@ -246,130 +192,127 @@ class AlternativeController extends Controller
         return redirect()->route('alternatives.index')->with('success', 'Data berhasil dihapus.');
     }
 
+    // =========================================================================
+    // IMPLEMENTASI METODE PENGAMBILAN KEPUTUSAN (DENGAN DETAIL PROSES)
+    // =========================================================================
+
     /**
-     * Menghitung hasil Naive Bayes untuk klasifikasi "LAYAK" atau "TIDAK LAYAK".
-     *
-     * @param \Illuminate\Support\Collection $alternatives Koleksi alternatif yang akan diproses.
-     * @return array Array asosiatif berisi 'layak_alternatives', 'tidak_layak_alternatives', 'bayes_scores'.
+     * Menghitung hasil Naive Bayes dan mengembalikan detail proses.
      */
-    private function calculateBayes(
-        $alternatives,
-        $criterias,
-        $priorLayak = 0.5,
-        $priorTidakLayak = 0.5,
-        $smoothing = 1e-9 // Laplace smoothing untuk menghindari probabilitas nol
-    ) {
+    private function calculateBayes($alternatives, $criterias, $priorLayak = 0.5, $priorTidakLayak = 0.5, $smoothing = 1e-9)
+    {
         $bayesScores = [];
         $layakAlternatives = [];
         $tidakLayakAlternatives = [];
+        $detailPerhitungan = [];
 
         foreach ($alternatives as $alt) {
             $scores = $alt->scores->keyBy('criteria_id');
-            $probGivenLayak = 1.0; // P(X|Layak)
-            $probGivenTidakLayak = 1.0; // P(X|Tidak Layak)
+            $probGivenLayak = 1.0;
+            $probGivenTidakLayak = 1.0;
+            $isDataComplete = true;
+            $stepDetails = ['alternative' => $alt->name, 'probabilities' => []];
 
             foreach ($criterias as $criteria) {
-                $featureValue = $scores->has($criteria->id) ? $scores[$criteria->id]->value : null;
-
-                if ($featureValue === null) {
-                    continue 2;
+                if (!$scores->has($criteria->id)) {
+                    $isDataComplete = false;
+                    break;
                 }
+            }
+            if (!$isDataComplete) {
+                continue;
+            }
 
+            foreach ($criterias as $criteria) {
+                $featureValue = $scores[$criteria->id]->value;
                 $bayesProb = $criteria->bayes_probability;
-
                 $p_feature_given_layak = 0.5;
                 $p_feature_given_tidak_layak = 0.5;
-
                 $lowerName = Str::lower($criteria->name);
 
                 if (Str::contains($lowerName, 'prestasi akademik')) {
-                    if ($featureValue >= 3) { // Favorable: 5,4,3
+                    if ($featureValue >= 3) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: 1
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 } elseif (Str::contains($lowerName, 'prestasi non-akademik')) {
-                    if ($featureValue == 1) { // Favorable: 1 (Ada)
+                    if ($featureValue == 1) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: 0 (Tidak Ada)
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 } elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
-                    if ($featureValue >= 2) { // Favorable: 4,3,2
+                    if ($featureValue >= 2) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: 1
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 } elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
-                    // COST criteria. Favorable: 5 (Sangat Buruk) -> 0.95
-                    if ($featureValue == 5) { // Sangat Buruk
+                    if ($featureValue == 5) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } elseif ($featureValue == 4) { // Buruk
+                    } elseif ($featureValue == 4) {
                         $p_feature_given_layak = $bayesProb * 0.9;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.9);
-                    } elseif ($featureValue == 3) { // Cukup
+                    } elseif ($featureValue == 3) {
                         $p_feature_given_layak = $bayesProb * 0.5;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.5);
-                    } else { // Baik (2), Sangat Baik (1) = Unfavorable
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 } elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
-                    // COST criteria. Favorable: 1 (< Rp 1jt) -> 0.98
-                    if ($featureValue == 1) { // < Rp 1.000.000
+                    if ($featureValue == 1) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } elseif ($featureValue == 2) { // Rp 1.000.000 - Rp 2.500.000
+                    } elseif ($featureValue == 2) {
                         $p_feature_given_layak = $bayesProb * 0.9;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.9);
-                    } elseif ($featureValue == 3) { // Rp 2.500.000 - Rp 5.000.000
+                    } elseif ($featureValue == 3) {
                         $p_feature_given_layak = $bayesProb * 0.7;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.7);
-                    } else { // 4, 5 (Unfavorable)
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
-                } elseif (Str::contains($lowerName, 'domisili 3t')) {
-                    if ($featureValue == 1) { // Favorable: 1 (Ya)
+                } elseif (Str::contains($lowerName, 'domisili 3t') || Str::contains($lowerName, 'difabel')) {
+                    if ($featureValue == 1) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: 0 (Tidak)
-                        $p_feature_given_layak = 1 - $bayesProb;
-                        $p_feature_given_tidak_layak = $bayesProb;
-                    }
-                } elseif (Str::contains($lowerName, 'difabel')) {
-                    if ($featureValue == 1) { // Favorable: 1 (Ya)
-                        $p_feature_given_layak = $bayesProb;
-                        $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: 0 (Tidak)
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 } elseif (Str::contains($lowerName, 'jumlah tanggungan orang tua')) {
-                    // BENEFIT criteria. Favorable: >= 3 tanggungan (asumsi)
                     if ($featureValue >= 3) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } else { // Unfavorable: < 3 tanggungan
+                    } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 }
-
+                
                 $probGivenLayak *= ($p_feature_given_layak + $smoothing);
                 $probGivenTidakLayak *= ($p_feature_given_tidak_layak + $smoothing);
+                
+                $stepDetails['probabilities'][] = [
+                    'criteria' => $criteria->name,
+                    'value' => $featureValue,
+                    'p_given_layak' => $p_feature_given_layak,
+                    'p_given_tidak_layak' => $p_feature_given_tidak_layak
+                ];
             }
 
             $probLayakFinal = $priorLayak * $probGivenLayak;
             $probTidakLayakFinal = $priorTidakLayak * $probGivenTidakLayak;
-
             $totalPosterior = $probLayakFinal + $probTidakLayakFinal;
 
             $finalProbLayak = $totalPosterior != 0 ? $probLayakFinal / $totalPosterior : 0;
@@ -383,6 +326,11 @@ class AlternativeController extends Controller
                 'score_tidak_layak' => $finalProbTidakLayak,
                 'keputusan' => $keputusan,
             ];
+            
+            $stepDetails['final_prob_layak'] = $finalProbLayak;
+            $stepDetails['final_prob_tidak_layak'] = $finalProbTidakLayak;
+            $stepDetails['keputusan'] = $keputusan;
+            $detailPerhitungan[] = $stepDetails;
 
             if ($keputusan === 'LAYAK') {
                 $layakAlternatives[] = $alt;
@@ -397,27 +345,23 @@ class AlternativeController extends Controller
             'bayes_scores' => $bayesScores,
             'layak_alternatives' => collect($layakAlternatives),
             'tidak_layak_alternatives' => collect($tidakLayakAlternatives),
+            'proses_lengkap' => $detailPerhitungan, // Menambahkan detail proses
         ];
     }
 
     /**
-     * Menghitung hasil MOORA.
-     *
-     * @param \Illuminate\Support\Collection $alternatives Koleksi alternatif yang akan diproses.
-     * @param \Illuminate\Support\Collection $criterias Koleksi kriteria.
-     * @return array Array asosiatif berisi skor MOORA yang sudah diurutkan.
+     * Menghitung hasil MOORA dan mengembalikan detail proses.
      */
     private function calculateMoora($alternatives, $criterias)
     {
-        $totalCriteria = $criterias->count();
         $matrix = [];
         $validAlternativesForMoora = [];
+        $rawMatrix = [];
 
         foreach ($alternatives as $alt) {
             $scores = $alt->scores->keyBy('criteria_id');
             $row = [];
             $isComplete = true;
-
             foreach ($criterias as $criteria) {
                 if (!$scores->has($criteria->id)) {
                     $isComplete = false;
@@ -425,15 +369,15 @@ class AlternativeController extends Controller
                 }
                 $row[] = $scores[$criteria->id]->value;
             }
-
             if ($isComplete) {
                 $validAlternativesForMoora[] = $alt;
                 $matrix[] = $row;
+                $rawMatrix[$alt->name] = $row;
             }
         }
 
         if (empty($matrix)) {
-            return [];
+            return ['rankings' => [], 'proses_lengkap' => []];
         }
 
         $denominators = [];
@@ -444,35 +388,153 @@ class AlternativeController extends Controller
             }
             $denominators[$j] = sqrt($sumSquares);
         }
-
+        
         $norm = [];
+        $normalizedMatrix = [];
         foreach ($matrix as $i => $row) {
+            $normRow = [];
             foreach ($row as $j => $val) {
-                $norm[$i][$j] = $denominators[$j] != 0 ? $val / $denominators[$j] : 0;
+                $normalizedValue = $denominators[$j] != 0 ? $val / $denominators[$j] : 0;
+                $norm[$i][$j] = $normalizedValue;
+                $normRow[] = $normalizedValue;
             }
+            $normalizedMatrix[$validAlternativesForMoora[$i]->name] = $normRow;
         }
 
         $mooraScores = [];
+        $finalScores = [];
         foreach ($norm as $i => $row) {
             $score = 0;
+            $benefitScore = 0;
+            $costScore = 0;
             foreach ($row as $j => $val) {
                 $weight = $criterias[$j]->weight;
                 if ($criterias[$j]->type === 'benefit') {
-                    $score += $val * $weight;
+                    $benefitScore += $val * $weight;
                 } else {
-                    $score -= $val * $weight;
+                    $costScore += $val * $weight;
                 }
             }
+            $score = $benefitScore - $costScore;
             $mooraScores[] = ['alt' => $validAlternativesForMoora[$i], 'score' => $score];
+            $finalScores[$validAlternativesForMoora[$i]->name] = [
+                'benefit_score' => $benefitScore,
+                'cost_score' => $costScore,
+                'final_score' => $score,
+            ];
+        }
+        
+        usort($mooraScores, fn($a, $b) => $b['score'] <=> $a['score']);
+        
+        $prosesLengkap = [
+            'raw_matrix' => $rawMatrix,
+            'denominators' => $denominators,
+            'normalized_matrix' => $normalizedMatrix,
+            'final_scores' => $finalScores
+        ];
+
+        return [
+            'rankings' => $mooraScores,
+            'proses_lengkap' => $prosesLengkap, // Menambahkan detail proses
+        ];
+    }
+    
+    /**
+     * Menghitung hasil MAIRCA dan mengembalikan detail proses.
+     */
+    private function calculateMairca($alternatives, $criterias)
+    {
+        $matrix = [];
+        $validAlternatives = [];
+        $rawMatrix = [];
+
+        foreach ($alternatives as $alt) {
+            $scores = $alt->scores->keyBy('criteria_id');
+            $row = [];
+            $isComplete = true;
+            foreach ($criterias as $criteria) {
+                if (!$scores->has($criteria->id)) {
+                    $isComplete = false;
+                    break;
+                }
+                $row[] = $scores[$criteria->id]->value;
+            }
+            if ($isComplete) {
+                $validAlternatives[] = $alt;
+                $matrix[] = $row;
+                $rawMatrix[$alt->name] = $row;
+            }
         }
 
-        usort($mooraScores, fn($a, $b) => $b['score'] <=> $a['score']);
+        if (empty($matrix)) {
+            return ['rankings' => [], 'proses_lengkap' => []];
+        }
 
-        return $mooraScores;
+        $n = count($validAlternatives);
+        $norm = [];
+        $normalizedMatrix = [];
+
+        foreach ($criterias as $j => $c) {
+            $column = array_column($matrix, $j);
+            $max = max($column);
+            $min = min($column);
+
+            foreach ($matrix as $i => $row) {
+                $normalizedValue = 0;
+                if ($c->type === 'benefit') {
+                    $normalizedValue = $max != 0 ? $row[$j] / $max : 0;
+                } else {
+                    $normalizedValue = $row[$j] != 0 ? $min / $row[$j] : 0;
+                }
+                $norm[$i][$j] = $normalizedValue;
+                $normalizedMatrix[$validAlternatives[$i]->name][$c->name] = $normalizedValue;
+            }
+        }
+
+        $Q = [];
+        $idealWeights = [];
+        foreach ($validAlternatives as $i => $alt) {
+            foreach ($criterias as $j => $c) {
+                $idealWeight = $c->weight / $n;
+                $Q[$i][$j] = $idealWeight;
+                $idealWeights[$alt->name][$c->name] = $idealWeight;
+            }
+        }
+
+        $deviation = [];
+        $finalScores = [];
+        foreach ($norm as $i => $row) {
+            $total = 0;
+            $deviationDetails = [];
+            foreach ($row as $j => $val) {
+                $diff = abs($Q[$i][$j] - $val);
+                $total += $diff;
+                $deviationDetails[$criterias[$j]->name] = $diff;
+            }
+            $deviation[] = ['alt' => $validAlternatives[$i], 'score' => $total];
+            $finalScores[$validAlternatives[$i]->name] = [
+                'deviation_details' => $deviationDetails,
+                'final_deviation' => $total
+            ];
+        }
+
+        usort($deviation, fn($a, $b) => $a['score'] <=> $b['score']);
+
+        $prosesLengkap = [
+            'raw_matrix' => $rawMatrix,
+            'normalized_matrix' => $normalizedMatrix,
+            'ideal_weights' => $idealWeights,
+            'final_scores' => $finalScores
+        ];
+
+        return [
+            'rankings' => $deviation,
+            'proses_lengkap' => $prosesLengkap, // Menambahkan detail proses
+        ];
     }
-
+    
     /**
-     * Menampilkan hasil kombinasi Naive Bayes (filtering) dan MOORA (ranking).
+     * Menampilkan hasil kombinasi Naive Bayes (sebagai filtering) dan MOORA (sebagai ranking).
      *
      * @return \Illuminate\View\View
      */
@@ -490,98 +552,33 @@ class AlternativeController extends Controller
                 'tidakLayakCount' => 0,
                 'layakAlternatives' => collect([]),
                 'tidakLayakAlternatives' => collect([]),
+                'bayesProses' => [],
+                'mooraProses' => [],
             ]);
         }
 
-        // 1. Lakukan perhitungan Naive Bayes untuk klasifikasi awal
         $bayesOutput = $this->calculateBayes($alternatives, $criterias);
-
-        $bayesScores = $bayesOutput['bayes_scores'];
         $layakAlternatives = $bayesOutput['layak_alternatives'];
-        $tidakLayakAlternatives = $bayesOutput['tidak_layak_alternatives'];
-
-        // 2. Lakukan perhitungan MOORA hanya untuk alternatif yang "LAYAK"
-        $mooraRankings = $this->calculateMoora($layakAlternatives, $criterias);
+        $mooraOutput = $this->calculateMoora($layakAlternatives, $criterias);
 
         return view('alternatives.result-bayes-moora', [
-            'bayesResults' => $bayesScores,
-            'mooraRankings' => $mooraRankings,
+            'bayesResults' => $bayesOutput['bayes_scores'],
+            'mooraRankings' => $mooraOutput['rankings'],
             'totalAlternatives' => $alternatives->count(),
             'layakCount' => $layakAlternatives->count(),
-            'tidakLayakCount' => $tidakLayakAlternatives->count(),
+            'tidakLayakCount' => $bayesOutput['tidak_layak_alternatives']->count(),
             'layakAlternatives' => $layakAlternatives,
-            'tidakLayakAlternatives' => $tidakLayakAlternatives,
+            'tidakLayakAlternatives' => $bayesOutput['tidak_layak_alternatives'],
+            'bayesProses' => $bayesOutput['proses_lengkap'],
+            'mooraProses' => $mooraOutput['proses_lengkap'],
         ]);
     }
 
-    private function calculateMairca($alternatives, $criterias)
-    {
-        $totalCriteria = $criterias->count();
-        $matrix = [];
-        $validAlternatives = [];
-
-        foreach ($alternatives as $alt) {
-            $scores = $alt->scores->keyBy('criteria_id');
-            $row = [];
-            $isComplete = true;
-
-            foreach ($criterias as $criteria) {
-                if (!$scores->has($criteria->id)) {
-                    $isComplete = false;
-                    break;
-                }
-                $row[] = $scores[$criteria->id]->value;
-            }
-
-            if ($isComplete) {
-                $validAlternatives[] = $alt;
-                $matrix[] = $row;
-            }
-        }
-
-        if (empty($matrix)) {
-            return [];
-        }
-
-        $n = count($validAlternatives);
-        $norm = [];
-
-        foreach ($criterias as $j => $c) {
-            $column = array_column($matrix, $j);
-            $max = max($column);
-            $min = min($column);
-
-            foreach ($matrix as $i => $row) {
-                if ($c->type === 'benefit') {
-                    $norm[$i][$j] = $max != 0 ? $row[$j] / $max : 0;
-                } else {
-                    $norm[$i][$j] = $row[$j] != 0 ? $min / $row[$j] : 0;
-                }
-            }
-        }
-
-        $Q = [];
-        foreach ($validAlternatives as $i => $alt) {
-            foreach ($criterias as $j => $c) {
-                $Q[$i][$j] = $c->weight / $n;
-            }
-        }
-
-        $deviation = [];
-        foreach ($norm as $i => $row) {
-            $total = 0;
-            foreach ($row as $j => $val) {
-                $diff = abs($Q[$i][$j] - $val);
-                $total += $diff;
-            }
-            $deviation[] = ['alt' => $validAlternatives[$i], 'score' => $total];
-        }
-
-        usort($deviation, fn($a, $b) => $a['score'] <=> $b['score']);
-
-        return $deviation;
-    }
-
+    /**
+     * Menampilkan hasil kombinasi Naive Bayes (sebagai filtering) dan MAIRCA (sebagai ranking).
+     *
+     * @return \Illuminate\View\View
+     */
     public function result_bayes_mairca()
     {
         $criterias = Criteria::all();
@@ -596,27 +593,25 @@ class AlternativeController extends Controller
                 'tidakLayakCount' => 0,
                 'layakAlternatives' => collect([]),
                 'tidakLayakAlternatives' => collect([]),
+                'bayesProses' => [],
+                'maircaProses' => [],
             ]);
         }
 
-        // 1. Hitung klasifikasi Naive Bayes
         $bayesOutput = $this->calculateBayes($alternatives, $criterias);
-
-        $bayesScores = $bayesOutput['bayes_scores'];
         $layakAlternatives = $bayesOutput['layak_alternatives'];
-        $tidakLayakAlternatives = $bayesOutput['tidak_layak_alternatives'];
-
-        // 2. Hitung MAIRCA hanya untuk yang "LAYAK"
-        $maircaRankings = $this->calculateMairca($layakAlternatives, $criterias);
+        $maircaOutput = $this->calculateMairca($layakAlternatives, $criterias);
 
         return view('alternatives.result-bayes-mairca', [
-            'bayesResults' => $bayesScores,
-            'maircaRankings' => $maircaRankings,
+            'bayesResults' => $bayesOutput['bayes_scores'],
+            'maircaRankings' => $maircaOutput['rankings'],
             'totalAlternatives' => $alternatives->count(),
             'layakCount' => $layakAlternatives->count(),
-            'tidakLayakCount' => $tidakLayakAlternatives->count(),
+            'tidakLayakCount' => $bayesOutput['tidak_layak_alternatives']->count(),
             'layakAlternatives' => $layakAlternatives,
-            'tidakLayakAlternatives' => $tidakLayakAlternatives,
+            'tidakLayakAlternatives' => $bayesOutput['tidak_layak_alternatives'],
+            'bayesProses' => $bayesOutput['proses_lengkap'],
+            'maircaProses' => $maircaOutput['proses_lengkap'],
         ]);
     }
 }

@@ -1,206 +1,198 @@
 @extends('layouts.app')
 
+@section('title', 'Hasil Kombinasi Bayes - MOORA')
+
 @section('content')
-    <style>
-        .summary-card {
-            background-color: #e9f7ff;
-            /* Light blue background */
-            border-left: 5px solid #007bff;
-            /* Blue border */
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+<div class="container my-4">
+    <h1 class="mb-4"><i class="fas fa-brain me-2"></i>Hasil Kombinasi <span class="text-primary">Naive Bayes</span> dan <span class="text-success">MOORA</span></h1>
 
-        .summary-card h4 {
-            color: #0056b3;
-            font-weight: bold;
-        }
-
-        .summary-item {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .summary-item strong {
-            color: #333;
-        }
-
-        .badge-lg {
-            font-size: 0.9em;
-            padding: 0.5em 0.8em;
-            border-radius: 0.5rem;
-        }
-
-        .table-responsive {
-            margin-top: 1.5rem;
-        }
-
-        .table thead th {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-            vertical-align: middle;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .table-success {
-            background-color: #d4edda !important;
-            color: #155724 !important;
-        }
-
-        .table-danger-bayes {
-            background-color: #f8d7da !important;
-            color: #721c24 !important;
-        }
-
-        .accordion-button {
-            background-color: #f8f9fa;
-            color: #333;
-            font-weight: bold;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: #e2e6ea;
-            color: #000;
-        }
-
-        .accordion-body {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-top: none;
-            border-bottom-left-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
-        }
-    </style>
-
-    <div class="container mt-4">
-        <h2 class="mb-4 text-center">📊 Hasil Rekomendasi Penerima Beasiswa</h2>
-        <p class="text-center lead text-muted">Kombinasi Metode Naive Bayes & MOORA</p>
-
-        @if ($totalAlternatives === 0)
-            <div class="alert alert-warning text-center">
-                <strong>⚠️ Tidak ada data alternatif untuk ditampilkan.</strong> Silakan tambahkan data alternatif dan skor
-                kriteria.
-            </div>
-        @else
-            {{-- Ringkasan Proses Filtering Bayes --}}
-            <div class="summary-card text-center">
-                <h4 class="mb-3">Ringkasan Proses Seleksi Awal (Naive Bayes)</h4>
-                <div class="row justify-content-center">
-                    <div class="col-md-4 summary-item">
-                        <strong>Total Kandidat Awal:</strong> <br><span
-                            class="badge bg-primary badge-lg">{{ $totalAlternatives }}</span>
-                    </div>
-                    <div class="col-md-4 summary-item">
-                        <strong>Lolos Penyaringan (LAYAK):</strong><br> <span
-                            class="badge bg-success badge-lg">{{ $layakCount }}</span>
-                    </div>
-                    <div class="col-md-4 summary-item">
-                        <strong>Tidak Lolos Penyaringan (TIDAK LAYAK):</strong> <br><span
-                            class="badge bg-danger badge-lg">{{ $tidakLayakCount }}</span>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-info shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fas fa-th-list fa-2x me-3"></i>
+                    <div>
+                        <h5 class="card-title mb-0">Total Alternatif</h5>
+                        <p class="card-text fs-4 fw-bold">{{ $totalAlternatives }}</p>
                     </div>
                 </div>
             </div>
-
-            @if (empty($mooraRankings))
-                <div class="alert alert-info text-center">
-                    <strong>ℹ️ Tidak ada alternatif yang lolos penyaringan Naive Bayes untuk dihitung dengan MOORA.</strong>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                    <div>
+                        <h5 class="card-title mb-0">Alternatif <span class="badge bg-light text-success">Layak</span></h5>
+                        <p class="card-text fs-4 fw-bold">{{ $layakCount }}</p>
+                    </div>
                 </div>
-            @else
-                <h3 class="mb-3 mt-5 text-center">Ranking Akhir (MOORA) untuk Kandidat LAYAK</h3>
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="fas fa-times-circle fa-2x me-3"></i>
+                    <div>
+                        <h5 class="card-title mb-0">Alternatif <span class="badge bg-light text-danger">Tidak Layak</span></h5>
+                        <p class="card-text fs-4 fw-bold">{{ $tidakLayakCount }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Bagian Naive Bayes --}}
+    <section class="mb-5">
+        <h2 class="mb-3"><i class="fas fa-filter me-2"></i>Hasil <span class="text-primary">Naive Bayes</span> (Filtering)</h2>
+        @if(count($bayesResults) > 0)
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fas fa-user"></i> Alternatif</th>
+                        <th><i class="fas fa-arrow-up"></i> Probabilitas Layak</th>
+                        <th><i class="fas fa-arrow-down"></i> Probabilitas Tidak Layak</th>
+                        <th><i class="fas fa-gavel"></i> Keputusan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($bayesResults as $result)
+                    <tr>
+                        <td><i class="fas fa-user-check text-primary me-1"></i>{{ $result['alt']->name }}</td>
+                        <td>{{ number_format($result['score_layak'], 6) }}</td>
+                        <td>{{ number_format($result['score_tidak_layak'], 6) }}</td>
+                        <td>
+                            @if($result['keputusan'] == 'LAYAK')
+                                <span class="badge bg-success fs-6"><i class="fas fa-check me-1"></i>LAYAK</span>
+                            @else
+                                <span class="badge bg-danger fs-6"><i class="fas fa-times me-1"></i>TIDAK LAYAK</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="mt-5"><i class="fas fa-book-open me-2"></i>Detail Proses Perhitungan Bayes</h3>
+        <div class="accordion" id="bayesProcessAccordion">
+            @foreach($bayesProses as $index => $process)
+            <div class="accordion-item shadow-sm mb-2 rounded">
+                <h2 class="accordion-header" id="headingBayes{{$index}}">
+                    <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBayes{{$index}}" aria-expanded="false" aria-controls="collapseBayes{{$index}}">
+                        <i class="fas fa-user fa-fw me-2"></i>Alternatif {{ $process['alternative'] }}
+                    </button>
+                </h2>
+                <div id="collapseBayes{{$index}}" class="accordion-collapse collapse" aria-labelledby="headingBayes{{$index}}" data-bs-parent="#bayesProcessAccordion">
+                    <div class="accordion-body bg-white">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle text-center">
-                                <thead class="table-primary">
+                            <table class="table table-sm table-bordered mb-3 align-middle">
+                                <thead class="table-secondary">
                                     <tr>
-                                        <th class="text-nowrap">🏆 Peringkat</th>
-                                        <th class="text-nowrap">👤 Nama Alternatif</th>
-                                        <th class="text-nowrap">📈 Skor MOORA Akhir<br>
-                                            <small class="text-white-50 fst-italic">(semakin tinggi semakin baik)</small>
-                                        </th>
+                                        <th><i class="fas fa-balance-scale"></i> Kriteria</th>
+                                        <th><i class="fas fa-calculator"></i> Nilai</th>
+                                        <th><i class="fas fa-percent"></i> P(Feature|Layak)</th>
+                                        <th><i class="fas fa-percent"></i> P(Feature|Tidak Layak)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($mooraRankings as $index => $item)
-                                        <tr @if ($index == 0) class="table-success fw-bold" @endif>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $item['alt']->name }}</td>
-                                            <td>{{ number_format($item['score'], 4) }}</td>
-                                        </tr>
+                                    @foreach($process['probabilities'] as $prob)
+                                    <tr>
+                                        <td>{{ $prob['criteria'] }}</td>
+                                        <td>{{ $prob['value'] }}</td>
+                                        <td>{{ number_format($prob['p_given_layak'], 6) }}</td>
+                                        <td>{{ number_format($prob['p_given_tidak_layak'], 6) }}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="alert alert-success mt-4 text-center">
-                            <h5 class="mb-2">🏅 <strong>Alternatif Terbaik:</strong></h5>
-                            <p class="fs-5 mb-0">{{ $mooraRankings[0]['alt']->name }}<br>
-                                <span class="text-muted">Skor MOORA Tertinggi:
-                                    {{ number_format($mooraRankings[0]['score'], 4) }}</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            {{-- Bagian Alternatif TIDAK LAYAK (Collapsible) --}}
-            @if (!$tidakLayakAlternatives->isEmpty())
-                <div class="accordion mt-5" id="accordionTidakLayak">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <i class="fas fa-times-circle me-2 text-danger"></i> Lihat Alternatif TIDAK LAYAK (Hasil
-                                Bayes)
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionTidakLayak">
-                            <div class="accordion-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle text-center">
-                                        <thead class="table-danger">
-                                            <tr>
-                                                <th class="text-nowrap">👤 Nama Alternatif</th>
-                                                <th class="text-nowrap">📈 Probabilitas LAYAK</th>
-                                                <th class="text-nowrap">📉 Probabilitas TIDAK LAYAK</th>
-                                                <th class="text-nowrap">❌ Keputusan Bayes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($bayesResults as $item)
-                                                @if ($item['keputusan'] == 'TIDAK LAYAK')
-                                                    <tr class="table-danger-bayes">
-                                                        <td>{{ $item['alt']->name }}</td>
-                                                        <td>{{ number_format($item['score_layak'], 4) }}</td>
-                                                        <td>{{ number_format($item['score_tidak_layak'], 4) }}</td>
-                                                        <td><span class="badge bg-danger">TIDAK LAYAK</span></td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="badge bg-primary fs-6 p-3 flex-grow-1">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Final P(Layak): <strong>{{ number_format($process['final_prob_layak'], 6) }}</strong>
+                            </div>
+                            <div class="badge bg-warning text-dark fs-6 p-3 flex-grow-1">
+                                <i class="fas fa-times-circle me-2"></i>
+                                Final P(Tidak Layak): <strong>{{ number_format($process['final_prob_tidak_layak'], 6) }}</strong>
+                            </div>
+                            <div class="badge {{ $process['keputusan'] === 'LAYAK' ? 'bg-success' : 'bg-danger' }} fs-6 p-3 flex-grow-1">
+                                <i class="fas fa-gavel me-2"></i>
+                                Keputusan: <strong>{{ $process['keputusan'] }}</strong>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
-
-        @endif {{-- End if totalAlternatives empty check --}}
-
-        <div class="text-center mt-5 mb-4">
-            <a href="{{ route('alternatives.index') }}" class="btn btn-outline-secondary btn-lg">
-                <i class="fas fa-arrow-left me-2"></i> Kembali ke Data Alternatif
-            </a>
+            </div>
+            @endforeach
         </div>
-    </div>
+        @else
+        <p class="text-muted fs-5"><i class="fas fa-info-circle me-2"></i>Belum ada data hasil Naive Bayes.</p>
+        @endif
+    </section>
+
+    <hr>
+
+    {{-- Bagian MOORA --}}
+    <section>
+        <h2 class="mb-3"><i class="fas fa-tasks me-2"></i>Ranking <span class="text-success">MOORA</span> (Hanya Alternatif Layak)</h2>
+
+        @if(count($mooraRankings) > 0)
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-striped table-hover align-middle mb-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fas fa-sort-numeric-down"></i> Ranking</th>
+                        <th><i class="fas fa-user"></i> Alternatif</th>
+                        <th><i class="fas fa-plus-circle"></i> Benefit Score</th>
+                        <th><i class="fas fa-minus-circle"></i> Cost Score</th>
+                        <th><i class="fas fa-equals"></i> Final Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php $rankNo = 1; @endphp
+                    @foreach($mooraRankings as $ranking)
+                    @php
+                        $altName = $ranking['alt']->name;
+                        $finalScores = $mooraProses['final_scores'][$altName] ?? null;
+                    @endphp
+                    <tr>
+                        <td>{{ $rankNo++ }}</td>
+                        <td>{{ $altName }}</td>
+                        <td>{{ isset($finalScores) ? number_format($finalScores['benefit_score'], 6) : '-' }}</td>
+                        <td>{{ isset($finalScores) ? number_format($finalScores['cost_score'], 6) : '-' }}</td>
+                        <td>{{ isset($finalScores) ? number_format($finalScores['final_score'], 6) : '-' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="mb-3"><i class="fas fa-book-reader me-2"></i>Detail Proses Perhitungan MOORA</h3>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h5><i class="fas fa-th-list me-1"></i> Raw Matrix</h5>
+                <pre class="bg-light p-3 rounded shadow-sm" style="max-height:300px; overflow:auto;">{{ print_r($mooraProses['raw_matrix'], true) }}</pre>
+            </div>
+            <div class="col-md-6">
+                <h5><i class="fas fa-calculator me-1"></i> Denominators (Root of Sum of Squares)</h5>
+                <pre class="bg-light p-3 rounded shadow-sm" style="max-height:300px; overflow:auto;">{{ print_r($mooraProses['denominators'], true) }}</pre>
+            </div>
+            <div class="col-md-6">
+                <h5><i class="fas fa-balance-scale me-1"></i> Normalized Matrix</h5>
+                <pre class="bg-light p-3 rounded shadow-sm" style="max-height:300px; overflow:auto;">{{ print_r($mooraProses['normalized_matrix'], true) }}</pre>
+            </div>
+            <div class="col-md-6">
+                <h5><i class="fas fa-star me-1"></i> Final Scores</h5>
+                <pre class="bg-light p-3 rounded shadow-sm" style="max-height:300px; overflow:auto;">{{ print_r($mooraProses['final_scores'], true) }}</pre>
+            </div>
+        </div>
+
+        @else
+        <p class="text-muted fs-5"><i class="fas fa-info-circle me-2"></i>Belum ada data untuk perhitungan MOORA, atau semua alternatif tidak layak.</p>
+        @endif
+    </section>
+</div>
 @endsection
