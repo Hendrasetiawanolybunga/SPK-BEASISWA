@@ -16,7 +16,7 @@ namespace Database\Seeders;
             if (!Admin::where('username', 'admin')->exists()) {
                 Admin::create([
                     'username' => 'admin',
-                    'email' => 'codingbelajar46@gmail.com', 
+                    'email' => 'coding@gmail.com', 
                     'password' => Hash::make('admin123'), 
                 ]);
                 $this->command->info('Admin default berhasil dibuat!');

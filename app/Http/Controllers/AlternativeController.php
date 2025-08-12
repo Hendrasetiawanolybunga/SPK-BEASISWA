@@ -554,6 +554,7 @@ class AlternativeController extends Controller
                 'tidakLayakAlternatives' => collect([]),
                 'bayesProses' => [],
                 'mooraProses' => [],
+                'criterias' => collect([]),
             ]);
         }
 
@@ -571,6 +572,7 @@ class AlternativeController extends Controller
             'tidakLayakAlternatives' => $bayesOutput['tidak_layak_alternatives'],
             'bayesProses' => $bayesOutput['proses_lengkap'],
             'mooraProses' => $mooraOutput['proses_lengkap'],
+            'criterias' => $criterias,
         ]);
     }
 
@@ -595,6 +597,7 @@ class AlternativeController extends Controller
                 'tidakLayakAlternatives' => collect([]),
                 'bayesProses' => [],
                 'maircaProses' => [],
+                'criterias' => collect([]),
             ]);
         }
 
@@ -612,6 +615,7 @@ class AlternativeController extends Controller
             'tidakLayakAlternatives' => $bayesOutput['tidak_layak_alternatives'],
             'bayesProses' => $bayesOutput['proses_lengkap'],
             'maircaProses' => $maircaOutput['proses_lengkap'],
+            'criterias' => $criterias,
         ]);
     }
 }
