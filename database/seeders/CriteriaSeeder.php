@@ -25,31 +25,31 @@ class CriteriaSeeder extends Seeder
                 'name' => 'Prestasi Non-Akademik',
                 'type' => 'benefit',
                 'weight' => 0.11,
-                'bayes_probability' => 0.83
+                'bayes_probability' => 0.66
             ],
             [
                 'name' => 'Domisili 3T',
                 'type' => 'benefit',
                 'weight' => 0.11,
-                'bayes_probability' => 0.83
+                'bayes_probability' => 0.66
             ],
             [
                 'name' => 'Difabel',
                 'type' => 'benefit',
                 'weight' => 0.10,
-                'bayes_probability' => 0.80
+                'bayes_probability' => 0.60
             ],
             [
                 'name' => 'Keterlibatan Masyarakat',
                 'type' => 'benefit',
                 'weight' => 0.10,
-                'bayes_probability' => 0.80
+                'bayes_probability' => 0.60
             ],
             [
                 'name' => 'Kondisi Ekonomi',
                 'type' => 'cost',
                 'weight' => 0.10,
-                'bayes_probability' => 0.80
+                'bayes_probability' => 0.60
             ],
             [
                 'name' => 'Penghasilan Orang Tua',
