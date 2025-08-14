@@ -93,13 +93,13 @@
                                                 if ($score) {
                                                     if (Str::contains($lowerName, 'prestasi akademik')) {
                                                         switch ($score->value) {
-                                                            case 5:
+                                                            case 4:
                                                                 $displayValue = 'Juara Olimpiade';
                                                                 break;
-                                                            case 4:
+                                                            case 3:
                                                                 $displayValue = 'Juara Kelas';
                                                                 break;
-                                                            case 3:
+                                                            case 2:
                                                                 $displayValue = 'Juara Lainnya';
                                                                 break;
                                                             case 1:

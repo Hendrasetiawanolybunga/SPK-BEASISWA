@@ -9,12 +9,13 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-   public function run(): void
-{
-    $this->call([
-        CriteriaSeeder::class,
-        AdminSeeder::class,
-    ]);
-}
-
+    public function run(): void
+    {
+        $this->call([
+            CriteriaSeeder::class,
+            AdminSeeder::class,
+            AlternativeSeeder::class,
+            ScoreSeeder::class,
+        ]);
+    }
 }

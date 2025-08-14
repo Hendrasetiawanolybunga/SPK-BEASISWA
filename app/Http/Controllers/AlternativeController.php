@@ -16,9 +16,9 @@ class AlternativeController extends Controller
         $lowerName = Str::lower($criteriaName);
         if (Str::contains($lowerName, 'prestasi akademik')) {
             switch ($inputValue) {
-                case 'juara_olimpiade': return 5;
-                case 'juara_kelas': return 4;
-                case 'juara_lainnya': return 3;
+                case 'juara_olimpiade': return 4;
+                case 'juara_kelas': return 3;
+                case 'juara_lainnya': return 2;
                 case 'tidak_ada_akademik': return 1;
                 default: return 0;
             }
@@ -231,7 +231,7 @@ class AlternativeController extends Controller
                 $lowerName = Str::lower($criteria->name);
 
                 if (Str::contains($lowerName, 'prestasi akademik')) {
-                    if ($featureValue >= 3) {
+                    if ($featureValue >= 2) {
                         $p_feature_given_layak = $bayesProb;
                         $p_feature_given_tidak_layak = 1 - $bayesProb;
                     } else {
@@ -256,14 +256,17 @@ class AlternativeController extends Controller
                     }
                 } elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
                     if ($featureValue == 5) {
-                        $p_feature_given_layak = $bayesProb;
-                        $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } elseif ($featureValue == 4) {
                         $p_feature_given_layak = $bayesProb * 0.9;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.9);
+                    } elseif ($featureValue == 4) {
+                        $p_feature_given_layak = $bayesProb * 0.9;
+                        $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.7);
                     } elseif ($featureValue == 3) {
                         $p_feature_given_layak = $bayesProb * 0.5;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.5);
+                    } elseif ($featureValue == 2) {
+                        $p_feature_given_layak = $bayesProb * 0.3;
+                        $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.3);
                     } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;

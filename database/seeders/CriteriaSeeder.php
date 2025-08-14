@@ -28,18 +28,6 @@ class CriteriaSeeder extends Seeder
                 'bayes_probability' => 0.66
             ],
             [
-                'name' => 'Domisili 3T',
-                'type' => 'benefit',
-                'weight' => 0.11,
-                'bayes_probability' => 0.66
-            ],
-            [
-                'name' => 'Difabel',
-                'type' => 'benefit',
-                'weight' => 0.10,
-                'bayes_probability' => 0.60
-            ],
-            [
                 'name' => 'Keterlibatan Masyarakat',
                 'type' => 'benefit',
                 'weight' => 0.10,
@@ -56,6 +44,18 @@ class CriteriaSeeder extends Seeder
                 'type' => 'cost',
                 'weight' => 0.16,
                 'bayes_probability' => 0.98
+            ],
+            [
+                'name' => 'Domisili 3T',
+                'type' => 'benefit',
+                'weight' => 0.11,
+                'bayes_probability' => 0.66
+            ],
+            [
+                'name' => 'Difabel',
+                'type' => 'benefit',
+                'weight' => 0.10,
+                'bayes_probability' => 0.60
             ],
             [
                 'name' => 'Jumlah Tanggungan Orang Tua',
