@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Alternative;
 use App\Models\Criteria;
 use App\Models\Pemenang;
+use App\Models\PemenangMairca;
+use App\Models\PemenangMoora;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -458,16 +460,16 @@ class AlternativeController extends Controller
 
         usort($mooraScores, fn($a, $b) => $b['score'] <=> $a['score']);
 
-        // Ambil pemenang (urutan pertama)
+        // Simpan semua nama sesuai urutan ranking
         if (!empty($mooraScores)) {
-            $pemenangName = $mooraScores[0]['alt']->name;
-            // Hapus data pemenang sebelumnya
-            Pemenang::truncate();
+            // Hapus data sebelumnya
+            PemenangMoora::truncate();
 
-            // Simpan ke database
-            Pemenang::create([
-                'name' => $pemenangName
-            ]);
+            foreach ($mooraScores as $rank => $item) {
+                PemenangMoora::create([
+                    'name' => $item['alt']->name,
+                ]);
+            }
         }
 
         $prosesLengkap = [
@@ -564,16 +566,16 @@ class AlternativeController extends Controller
 
         usort($deviation, fn($a, $b) => $a['score'] <=> $b['score']);
 
-        // Ambil pemenang (urutan pertama)
+        // Simpan semua nama sesuai urutan ranking
         if (!empty($deviation)) {
-            $pemenangName = $deviation[0]['alt']->name;
-            // Hapus data pemenang sebelumnya
-            Pemenang::truncate();
+            // Hapus data sebelumnya
+            PemenangMairca::truncate();
 
-            // Simpan ke database
-            Pemenang::create([
-                'name' => $pemenangName
-            ]);
+            foreach ($deviation as $rank => $item) {
+                PemenangMairca::create([
+                    'name' => $item['alt']->name,
+                ]);
+            }
         }
 
         $prosesLengkap = [

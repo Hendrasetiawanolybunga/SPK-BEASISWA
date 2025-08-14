@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Alternative; // Pastikan model Alternative ada
 use App\Models\Criteria;    // Pastikan model Criteria ada
 use App\Models\Pemenang;
+use App\Models\PemenangMairca;
+use App\Models\PemenangMoora;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -24,9 +26,9 @@ class DashboardController extends Controller
 
     public function home()
     {
-        $totalAlternatives = Alternative::count();
-        $pemenang = Pemenang::first();
+        $pemenangMoora = PemenangMoora::all();
+        $pemenangMairca = PemenangMairca::all();
 
-        return view('home', compact('totalAlternatives', 'pemenang'));
+        return view('home', compact('pemenangMoora', 'pemenangMairca'));
     }
 }

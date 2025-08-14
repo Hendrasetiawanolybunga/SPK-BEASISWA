@@ -111,51 +111,34 @@
                 <div class="services-left-dec">
                     <img src="assets/images/services-left-dec.png" alt="">
                 </div>
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
                         <div class="section-heading">
                             <h2>Kami <em>Memberikan</em> Dukungan Terbaik Dalam Memilih <span>Program Beasiswa</span>
                             </h2>
                             <span>Beasiswa</span>
                         </div>
                     </div>
-                    <div class="col-lg-6 offset-lg-3 text-center">
-                        <div class="section-heading">
-                            <hr class="mb-4">
-                            <h2 class="fw-semibold mb-3" style="color: #333;">
-                                Pemenang Beasiswa Terbaru
-                            </h2>
-
-                            @if ($pemenang)
-                                <h4 class="fw-bold"
-                                    style="color: #00695c; border-bottom: 2px solid #00695c; display: inline-block; padding-bottom: 5px;">
-                                    {{ $pemenang->name }}
-                                </h4>
-                            @else
-                                <h4 class="text-muted" style="font-style: italic;">
-                                    Belum ada pemenang
-                                </h4>
-                            @endif
-                            <hr class="mt-4 mb-4">
-                        </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 mb-5">
                         <div class="owl-carousel owl-services">
                             <div class="item">
                                 <h4>Temukan Rekomendasi Beasiswa Terbaik Untukmu</h4>
-                                <div class="icon"><img src="assets/images/service-icon-01.png" alt=""></div>
+                                <div class="icon"><img src="assets/images/service-icon-01.png" alt="">
+                                </div>
                                 <p>Kami bantu kamu memilih beasiswa yang paling sesuai dengan profil dan impianmu.</p>
                             </div>
                             <div class="item">
                                 <h4>Meluncur Menuju Masa Depan dengan Beasiswa Tepat</h4>
-                                <div class="icon"><img src="assets/images/service-icon-02.png" alt=""></div>
+                                <div class="icon"><img src="assets/images/service-icon-02.png" alt="">
+                                </div>
                                 <p>Temukan rekomendasi beasiswa yang mempercepat langkahmu meraih cita-cita.</p>
                             </div>
                             <div class="item">
                                 <h4>Tingkatkan Potensimu Lewat Beasiswa Tepat</h4>
-                                <div class="icon"><img src="assets/images/service-icon-03.png" alt=""></div>
+                                <div class="icon"><img src="assets/images/service-icon-03.png" alt="">
+                                </div>
                                 <p>Dapatkan rekomendasi beasiswa yang membuka peluang sukses di masa depan.</p>
                             </div>
                             <div class="item">
@@ -342,6 +325,61 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5 px-5">
+            <!-- Pemenang Moora -->
+            <div class="col-md-6 my-3">
+                <div class="card h-100 border-0">
+                    <div class="card-header bg-success text-white text-center fw-bold fs-4"
+                        style="border-radius: 1rem;">
+                        Hasil Perhitungan MOORA
+                    </div>
+                    <div class="card-body p-0">
+                        @if ($pemenangMoora->count())
+                            <ul class="list-group list-group-flush">
+                                @foreach ($pemenangMoora as $index => $pemenang)
+                                    <li class="list-group-item list-group-item-action border-0 border-bottom text-center my-2 
+    {{ $index === 0 ? 'fs-3 fw-bold text-success' : 'fs-5' }}"
+                                        style="transition: background-color 0.5s; border-radius: 1rem; cursor: pointer;"
+                                        onmouseover="this.style.backgroundColor='#d3d3d3'"
+                                        onmouseout="this.style.backgroundColor='transparent'">
+                                        {{ $pemenang->name }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-center text-muted fst-italic my-3">Belum ada pemenang</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pemenang Mairca -->
+            <div class="col-md-6 my-3">
+                <div class="card h-100 border-0">
+                    <div class="card-header bg-warning text-dark text-center fw-bold fs-4"
+                        style="border-radius: 1rem;">
+                        Hasil Perhitungan MAIRCA
+                    </div>
+                    <div class="card-body p-0">
+                        @if ($pemenangMairca->count())
+                            <ul class="list-group list-group-flush">
+                                @foreach ($pemenangMairca as $index => $pemenang)
+                                    <li class="list-group-item list-group-item-action border-0 border-bottom text-center my-2 
+    {{ $index === 0 ? 'fs-3 fw-bold text-warning' : 'fs-5' }}"
+                                        style="transition: background-color 0.5s; border-radius: 1rem; cursor: pointer;"
+                                        onmouseover="this.style.backgroundColor='#d3d3d3'"
+                                        onmouseout="this.style.backgroundColor='transparent'">
+                                        {{ $pemenang->name }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-center text-muted fst-italic my-3">Belum ada pemenang</p>
+                        @endif
                     </div>
                 </div>
             </div>
