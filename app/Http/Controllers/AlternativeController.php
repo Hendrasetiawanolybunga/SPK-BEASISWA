@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alternative;
 use App\Models\Criteria;
+use App\Models\Pemenang;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,45 +17,73 @@ class AlternativeController extends Controller
         $lowerName = Str::lower($criteriaName);
         if (Str::contains($lowerName, 'prestasi akademik')) {
             switch ($inputValue) {
-                case 'juara_olimpiade': return 4;
-                case 'juara_kelas': return 3;
-                case 'juara_lainnya': return 2;
-                case 'tidak_ada_akademik': return 1;
-                default: return 0;
+                case 'juara_olimpiade':
+                    return 4;
+                case 'juara_kelas':
+                    return 3;
+                case 'juara_lainnya':
+                    return 2;
+                case 'tidak_ada_akademik':
+                    return 1;
+                default:
+                    return 0;
             }
         } elseif (Str::contains($lowerName, 'prestasi non-akademik')) {
             return ($inputValue == 'ada') ? 1 : 0;
         } elseif (Str::contains($lowerName, 'keterlibatan masyarakat')) {
             switch ($inputValue) {
-                case 'ketua': return 4;
-                case 'pengurus': return 3;
-                case 'anggota': return 2;
-                case 'tidak_ada_keterlibatan': return 1;
-                default: return 0;
+                case 'ketua':
+                    return 4;
+                case 'pengurus':
+                    return 3;
+                case 'anggota':
+                    return 2;
+                case 'tidak_ada_keterlibatan':
+                    return 1;
+                default:
+                    return 0;
             }
         } elseif (Str::contains($lowerName, 'kondisi ekonomi')) {
             switch ($inputValue) {
-                case 'sangat_buruk': return 5;
-                case 'buruk': return 4;
-                case 'cukup': return 3;
-                case 'baik': return 2;
-                case 'sangat_baik': return 1;
-                default: return 0;
+                case 'sangat_buruk':
+                    return 5;
+                case 'buruk':
+                    return 4;
+                case 'cukup':
+                    return 3;
+                case 'baik':
+                    return 2;
+                case 'sangat_baik':
+                    return 1;
+                default:
+                    return 0;
             }
         } elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
             switch ($inputValue) {
-                case '<_1jt': return 1;
-                case '1jt_1.5jt': return 2;
-                case '1.5jt_2jt': return 3;
-                case '2jt_2.5jt': return 4;
-                case '2.5jt_3jt': return 5;
-                case '3jt_4jt': return 6;
-                case '4jt_5jt': return 7;
-                case '5jt_6jt': return 8;
-                case '6jt_8jt': return 9;
-                case '8jt_10jt': return 10;
-                case '>_10jt': return 11;
-                default: return null;
+                case '<_1jt':
+                    return 1;
+                case '1jt_1.5jt':
+                    return 2;
+                case '1.5jt_2jt':
+                    return 3;
+                case '2jt_2.5jt':
+                    return 4;
+                case '2.5jt_3jt':
+                    return 5;
+                case '3jt_4jt':
+                    return 6;
+                case '4jt_5jt':
+                    return 7;
+                case '5jt_6jt':
+                    return 8;
+                case '6jt_8jt':
+                    return 9;
+                case '8jt_10jt':
+                    return 10;
+                case '>_10jt':
+                    return 11;
+                default:
+                    return null;
             }
         } elseif (Str::contains($lowerName, ['domisili 3t', 'difabel'])) {
             return (int) $inputValue;
@@ -302,10 +331,10 @@ class AlternativeController extends Controller
                         $p_feature_given_tidak_layak = $bayesProb;
                     }
                 }
-                
+
                 $probGivenLayak *= ($p_feature_given_layak + $smoothing);
                 $probGivenTidakLayak *= ($p_feature_given_tidak_layak + $smoothing);
-                
+
                 $stepDetails['probabilities'][] = [
                     'criteria' => $criteria->name,
                     'value' => $featureValue,
@@ -329,7 +358,7 @@ class AlternativeController extends Controller
                 'score_tidak_layak' => $finalProbTidakLayak,
                 'keputusan' => $keputusan,
             ];
-            
+
             $stepDetails['final_prob_layak'] = $finalProbLayak;
             $stepDetails['final_prob_tidak_layak'] = $finalProbTidakLayak;
             $stepDetails['keputusan'] = $keputusan;
@@ -391,7 +420,7 @@ class AlternativeController extends Controller
             }
             $denominators[$j] = sqrt($sumSquares);
         }
-        
+
         $norm = [];
         $normalizedMatrix = [];
         foreach ($matrix as $i => $row) {
@@ -426,9 +455,21 @@ class AlternativeController extends Controller
                 'final_score' => $score,
             ];
         }
-        
+
         usort($mooraScores, fn($a, $b) => $b['score'] <=> $a['score']);
-        
+
+        // Ambil pemenang (urutan pertama)
+        if (!empty($mooraScores)) {
+            $pemenangName = $mooraScores[0]['alt']->name;
+            // Hapus data pemenang sebelumnya
+            Pemenang::truncate();
+
+            // Simpan ke database
+            Pemenang::create([
+                'name' => $pemenangName
+            ]);
+        }
+
         $prosesLengkap = [
             'raw_matrix' => $rawMatrix,
             'denominators' => $denominators,
@@ -441,7 +482,7 @@ class AlternativeController extends Controller
             'proses_lengkap' => $prosesLengkap, // Menambahkan detail proses
         ];
     }
-    
+
     /**
      * Menghitung hasil MAIRCA dan mengembalikan detail proses.
      */
@@ -523,6 +564,18 @@ class AlternativeController extends Controller
 
         usort($deviation, fn($a, $b) => $a['score'] <=> $b['score']);
 
+        // Ambil pemenang (urutan pertama)
+        if (!empty($deviation)) {
+            $pemenangName = $deviation[0]['alt']->name;
+            // Hapus data pemenang sebelumnya
+            Pemenang::truncate();
+
+            // Simpan ke database
+            Pemenang::create([
+                'name' => $pemenangName
+            ]);
+        }
+
         $prosesLengkap = [
             'raw_matrix' => $rawMatrix,
             'normalized_matrix' => $normalizedMatrix,
@@ -535,7 +588,7 @@ class AlternativeController extends Controller
             'proses_lengkap' => $prosesLengkap, // Menambahkan detail proses
         ];
     }
-    
+
     /**
      * Menampilkan hasil kombinasi Naive Bayes (sebagai filtering) dan MOORA (sebagai ranking).
      *
@@ -621,7 +674,7 @@ class AlternativeController extends Controller
             'criterias' => $criterias,
         ]);
     }
-    
+
     /**
      * Menampilkan halaman cetak hasil analisis beasiswa.
      *

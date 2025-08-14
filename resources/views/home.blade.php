@@ -119,6 +119,26 @@
                             <span>Beasiswa</span>
                         </div>
                     </div>
+                    <div class="col-lg-6 offset-lg-3 text-center">
+                        <div class="section-heading">
+                            <hr class="mb-4">
+                            <h2 class="fw-semibold mb-3" style="color: #333;">
+                                Pemenang Beasiswa Terbaru
+                            </h2>
+
+                            @if ($pemenang)
+                                <h4 class="fw-bold"
+                                    style="color: #00695c; border-bottom: 2px solid #00695c; display: inline-block; padding-bottom: 5px;">
+                                    {{ $pemenang->name }}
+                                </h4>
+                            @else
+                                <h4 class="text-muted" style="font-style: italic;">
+                                    Belum ada pemenang
+                                </h4>
+                            @endif
+                            <hr class="mt-4 mb-4">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
