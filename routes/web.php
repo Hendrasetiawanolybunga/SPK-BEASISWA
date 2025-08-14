@@ -37,6 +37,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/result-bayes-moora', [AlternativeController::class, 'result_bayes_moora'])->name('result-bayes-moora');
         // Rute BARU untuk Hasil Kombinasi Bayes-MAIRCA
         Route::get('/result-bayes-mairca', [AlternativeController::class, 'result_bayes_mairca'])->name('result-bayes-mairca');
+        // Rute untuk Cetak Hasil PDF
+        Route::get('/print-results', [AlternativeController::class, 'printResults'])->name('print-results');
     });
 
     // Rute Sumber Daya Kriteria

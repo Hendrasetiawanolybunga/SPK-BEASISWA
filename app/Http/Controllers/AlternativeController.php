@@ -618,4 +618,38 @@ class AlternativeController extends Controller
             'criterias' => $criterias,
         ]);
     }
+    
+    /**
+     * Menampilkan halaman cetak hasil analisis beasiswa.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function printResults()
+    {
+        $criterias = Criteria::all();
+        $alternatives = Alternative::with('scores')->get();
+
+        if ($alternatives->isEmpty() || $criterias->isEmpty()) {
+            return view('alternatives.print-results', [
+                'mooraRankings' => [],
+                'maircaRankings' => [],
+            ]);
+        }
+
+        // Hitung hasil Bayes untuk mendapatkan alternatif yang layak
+        $bayesOutput = $this->calculateBayes($alternatives, $criterias);
+        $layakAlternatives = $bayesOutput['layak_alternatives'];
+
+        // Hitung hasil MOORA dan MAIRCA untuk alternatif yang layak
+        $mooraOutput = $this->calculateMoora($layakAlternatives, $criterias);
+        $maircaOutput = $this->calculateMairca($layakAlternatives, $criterias);
+
+        return view('alternatives.print-results', [
+            'mooraRankings' => $mooraOutput['rankings'],
+            'maircaRankings' => $maircaOutput['rankings'],
+            'mooraProses' => $mooraOutput['proses_lengkap'],
+            'maircaProses' => $maircaOutput['proses_lengkap'],
+            'criterias' => $criterias,
+        ]);
+    }
 }

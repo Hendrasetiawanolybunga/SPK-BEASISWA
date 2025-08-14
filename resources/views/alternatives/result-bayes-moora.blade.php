@@ -9,7 +9,12 @@
         <div class="col-lg-12">
             <div class="card border-0 bg-light shadow-sm rounded-3 overflow-hidden">
                 <div class="card-body p-4">
-                    <h1 class="display-6 fw-bold mb-3"><i class="fas fa-brain me-2 text-primary"></i>Hasil Analisis Beasiswa</h1>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="display-6 fw-bold"><i class="fas fa-brain me-2 text-primary"></i>Hasil Analisis Beasiswa</h1>
+                        <a href="{{ route('alternatives.print-results') }}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-print me-2"></i>Cetak Laporan PDF
+                        </a>
+                    </div>
                     <p class="lead mb-0">Halaman ini menampilkan hasil analisis kelayakan beasiswa menggunakan kombinasi dua metode:</p>
                     <div class="d-flex flex-wrap mt-3 gap-3">
                         <div class="p-3 bg-primary bg-opacity-10 rounded-3 flex-grow-1">
