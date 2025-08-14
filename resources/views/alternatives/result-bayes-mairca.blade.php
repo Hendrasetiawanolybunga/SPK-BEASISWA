@@ -26,33 +26,7 @@
                             <h5 class="fw-bold text-warning"><i class="fas fa-sort-amount-up me-2"></i>MAIRCA</h5>
                             <p class="mb-0">Metode ini <strong>mengurutkan kandidat yang layak</strong> berdasarkan perhitungan multi-kriteria.</p>
 
-    <div class="container my-4">
-        <!-- Intro Section with Explanation -->
-        <div class="row mb-4">
-            <div class="col-lg-12">
-                <div class="card border-0 bg-light shadow-sm rounded-3 overflow-hidden">
-                    <div class="card-body p-4">
-                        <h1 class="display-6 fw-bold mb-3"><i class="fas fa-brain me-2 text-primary"></i>Hasil Analisis
-                            Beasiswa</h1>
-                        <p class="lead mb-0">Halaman ini menampilkan hasil analisis kelayakan beasiswa menggunakan kombinasi
-                            dua metode:</p>
-                        <div class="d-flex flex-wrap mt-3 gap-3">
-                            <div class="p-3 bg-primary bg-opacity-10 rounded-3 flex-grow-1">
-                                <h5 class="fw-bold text-primary"><i class="fas fa-filter me-2"></i>Naive Bayes</h5>
-                                <p class="mb-0">Metode ini <strong>memfilter kandidat</strong> berdasarkan probabilitas
-                                    kelayakan dari data historis.</p>
-                            </div>
-                            <div class="p-3 bg-warning bg-opacity-10 rounded-3 flex-grow-1">
-                                <h5 class="fw-bold text-warning"><i class="fas fa-sort-amount-down me-2"></i>MAIRCA</h5>
-                                <p class="mb-0">Metode ini <strong>mengurutkan kandidat yang layak</strong> berdasarkan
-                                    perhitungan multi-kriteria.</p>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+   
 
         <!-- Dashboard Cards -->
         <div class="row g-3 mb-4">
