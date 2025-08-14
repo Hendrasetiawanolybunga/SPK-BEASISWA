@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
             CriteriaSeeder::class,
             AdminSeeder::class,
             AlternativeSeeder::class,
-            ScoreSeeder::class,
+            // ScoreSeeder::class,
         ]);
     }
 }
