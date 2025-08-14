@@ -76,8 +76,8 @@
                                             depan cerah melalui
                                             pendidikan yang layak!</p>
                                         <div class="down-buttons">
-                                            <div class="main-blue-button-hover">
-                                                <a href="#beasiswa">Coba Sekarang</a>
+                                            <div class="main-blue-button-hover scroll-to-section">
+                                                <a href="/#beasiswa">Coba Sekarang</a>
                                             </div>
                                         </div>
                                     </div>
@@ -90,8 +90,8 @@
                                             Dapatkan rekomendasi sesuai
                                             profil kamu hanya di sini!</p>
                                         <div class="down-buttons">
-                                            <div class="main-blue-button-hover">
-                                                <a href="#beasiswa">Beasiswa</a>
+                                            <div class="main-blue-button-hover scroll-to-section">
+                                                <a href="/#beasiswa">Beasiswa</a>
                                             </div>
                                         </div>
                                     </div>
