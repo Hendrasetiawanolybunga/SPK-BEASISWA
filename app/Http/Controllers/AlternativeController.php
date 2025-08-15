@@ -304,14 +304,14 @@ class AlternativeController extends Controller
                     }
                 } elseif (Str::contains($lowerName, 'penghasilan orang tua')) {
                     if ($featureValue == 1) {
-                        $p_feature_given_layak = $bayesProb;
-                        $p_feature_given_tidak_layak = 1 - $bayesProb;
-                    } elseif ($featureValue == 2) {
                         $p_feature_given_layak = $bayesProb * 0.9;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.9);
-                    } elseif ($featureValue == 3) {
+                    } elseif ($featureValue == 2) {
                         $p_feature_given_layak = $bayesProb * 0.7;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.7);
+                    } elseif ($featureValue == 3) {
+                        $p_feature_given_layak = $bayesProb * 0.3;
+                        $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.3);
                     } else {
                         $p_feature_given_layak = 1 - $bayesProb;
                         $p_feature_given_tidak_layak = $bayesProb;

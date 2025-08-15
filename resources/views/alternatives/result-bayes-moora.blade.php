@@ -119,7 +119,7 @@
                                                         <tbody>
                                                             @foreach ($bayesResults as $result)
                                                                 <tr
-                                                                    class="@if ($result['keputusan'] == 'LAYAK') border-start border-success border-5 @else border-start border-danger border-5 @endif">
+                                                                    class="@if ($result['keputusan'] == 'LAYAK') border-start border-success border-5 @else border-start border-danger @endif">
                                                                     <td class="fw-medium">{{ $result['alt']->name }}</td>
                                                                     <td class="text-center">
                                                                         <div
