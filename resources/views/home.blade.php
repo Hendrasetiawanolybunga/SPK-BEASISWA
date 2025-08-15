@@ -330,19 +330,19 @@
             </div>
         </div>
         <div class="row justify-content-center mt-5 px-5">
+            <div class="section-heading text-center mb-4">
+                <h2>Daftar Layak Penerima <em>Beasiswa</em></h2>
+            </div>
+
             <!-- Pemenang Moora -->
-            <div class="col-md-6 my-3">
+            <div class="col-lg-3 col-md-6 my-3">
                 <div class="card h-100 border-0">
-                    <div class="card-header bg-success text-white text-center fw-bold fs-4"
-                        style="border-radius: 1rem;">
-                        Hasil Perhitungan MOORA
-                    </div>
                     <div class="card-body p-0">
                         @if ($pemenangMoora->count())
                             <ul class="list-group list-group-flush">
                                 @foreach ($pemenangMoora as $index => $pemenang)
                                     <li class="list-group-item list-group-item-action border-0 border-bottom text-center my-2 
-    {{ $index === 0 ? 'fs-3 fw-bold text-success' : 'fs-5' }}"
+                                {{ $index === 0 ? 'fs-3 fw-bold text-success' : 'fs-5' }}"
                                         style="transition: background-color 0.5s; border-radius: 1rem; cursor: pointer;"
                                         onmouseover="this.style.backgroundColor='#d3d3d3'"
                                         onmouseout="this.style.backgroundColor='transparent'">
@@ -358,18 +358,14 @@
             </div>
 
             <!-- Pemenang Mairca -->
-            <div class="col-md-6 my-3">
+            <div class="col-lg-3 col-md-6 my-3">
                 <div class="card h-100 border-0">
-                    <div class="card-header bg-warning text-dark text-center fw-bold fs-4"
-                        style="border-radius: 1rem;">
-                        Hasil Perhitungan MAIRCA
-                    </div>
                     <div class="card-body p-0">
                         @if ($pemenangMairca->count())
                             <ul class="list-group list-group-flush">
                                 @foreach ($pemenangMairca as $index => $pemenang)
                                     <li class="list-group-item list-group-item-action border-0 border-bottom text-center my-2 
-    {{ $index === 0 ? 'fs-3 fw-bold text-warning' : 'fs-5' }}"
+                                {{ $index === 0 ? 'fs-3 fw-bold text-warning' : 'fs-5' }}"
                                         style="transition: background-color 0.5s; border-radius: 1rem; cursor: pointer;"
                                         onmouseover="this.style.backgroundColor='#d3d3d3'"
                                         onmouseout="this.style.backgroundColor='transparent'">
