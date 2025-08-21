@@ -290,7 +290,7 @@ class AlternativeController extends Controller
                         $p_feature_given_layak = $bayesProb * 0.9;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.9);
                     } elseif ($featureValue == 4) {
-                        $p_feature_given_layak = $bayesProb * 0.9;
+                        $p_feature_given_layak = $bayesProb * 0.7;
                         $p_feature_given_tidak_layak = 1 - ($bayesProb * 0.7);
                     } elseif ($featureValue == 3) {
                         $p_feature_given_layak = $bayesProb * 0.5;
