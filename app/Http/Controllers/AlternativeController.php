@@ -230,7 +230,7 @@ class AlternativeController extends Controller
     /**
      * Menghitung hasil Naive Bayes dan mengembalikan detail proses.
      */
-    private function calculateBayes($alternatives, $criterias, $priorLayak = 0.5, $priorTidakLayak = 0.5, $smoothing = 1e-9)
+    private function calculateBayes($alternatives, $criterias, $priorLayak = 0.5, $priorTidakLayak = 0.5)
     {
         $bayesScores = [];
         $layakAlternatives = [];
@@ -334,8 +334,8 @@ class AlternativeController extends Controller
                     }
                 }
 
-                $probGivenLayak *= ($p_feature_given_layak + $smoothing);
-                $probGivenTidakLayak *= ($p_feature_given_tidak_layak + $smoothing);
+                $probGivenLayak *= ($p_feature_given_layak);
+                $probGivenTidakLayak *= ($p_feature_given_tidak_layak);
 
                 $stepDetails['probabilities'][] = [
                     'criteria' => $criteria->name,
